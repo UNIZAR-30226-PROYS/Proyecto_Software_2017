@@ -38,7 +38,39 @@ public class CustomArrayAdapter extends ArrayAdapter<Row> implements
             this.idDist = d;
             this.idBoton = b;
         }
-    
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        // holder pattern
+        Holder holder = null;
+        if (convertView == null)
+        {
+            holder = new Holder();
+
+            convertView = layoutInflater.inflate(layout, null);
+            holder.setTextViewAutor((TextView) convertView.findViewById(idAutor));
+            holder.setTextViewTitulo((TextView) convertView.findViewById(idTitulo));
+            holder.setTextViewUsuario((TextView) convertView.findViewById(idUsuario));
+            holder.setTextViewDist((TextView) convertView.findViewById(idDist));
+            holder.setButton((Button) convertView.findViewById(idBoton));
+            convertView.setTag(holder);
+        }
+        else
+        {
+            holder = (Holder) convertView.getTag();
+        }
+
+        Row row = getItem(position);
+        holder.getTextViewTitulo().setText(row.getTitulo());
+        holder.getTextViewAutor().setText(row.getAutor());
+        holder.getTextViewUsuario().setText(row.getUsuario());
+        holder.getTextViewDist().setText(Long.toString(row.getDist()) + " km");
+        holder.getButton().setTag(position);
+        //holder.getCheckBox().setChecked(row.isChecked());
+        holder.getButton().setOnClickListener(this);
+
+        return convertView;
+    }
     
 
     
