@@ -17,6 +17,9 @@ import java.util.List;
 
 public class AddLibro extends AppCompatActivity {
 
+    private EditText mTitulo;
+    private EditText mAutor;
+    private EditText mCiudad;
 
 
     @Override
@@ -26,7 +29,19 @@ public class AddLibro extends AppCompatActivity {
 
         setTitle("Añadir Libro");
 
-        
+        mTitulo = (EditText) findViewById(R.id.bookTituloAdd);
+        mCiudad = (EditText) findViewById(R.id.bookLocationADD);
+        mAutor = (EditText) findViewById(R.id.bookAutorAdd);
+
+
+        Button btn = (Button) findViewById(R.id.uploadBook_button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptRegister();
+                startActivity(new Intent(AddLibro.this, Libros.class));
+            }
+        });
 
        
 
