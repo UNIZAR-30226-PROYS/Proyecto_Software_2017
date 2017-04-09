@@ -43,10 +43,34 @@ public class AddLibro extends AppCompatActivity {
             }
         });
 
-       
+        mCiudad.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                try {
+                    Geocoder geocoder = new Geocoder(AddLibro.this);
+                    List<android.location.Address> addresses;
+
+                        addresses = geocoder.getFromLocationName(mCiudad.getText().toString(), 1);
+
+                    if (addresses.size() > 0) {
+                        double latitude = addresses.get(0).getLatitude();
+                        double longitude = addresses.get(0).getLongitude();
+                        ( (TextView) findViewById(R.id.coordsadd)).setText("Lat " + latitude + ", Lon " + longitude);
+                    }
+                } catch (Exception e){
+
+                }
+            }
+        });
 
     }
 
+    private void attemptRegister() {
+        
+
+
+
+    }
 
 
 }
