@@ -44,7 +44,16 @@ public class Chat extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        setTitle("Chat con <LEGENDANNY>");
         
+            LinearLayout layout1 = (LinearLayout) findViewById(R.id.layout1);
+            LinearLayout layout2 = (LinearLayout) findViewById(R.id.layout2);
+            LinearLayout layout3 = (LinearLayout) findViewById(R.id.layout3);
+            LinearLayout layout4 = (LinearLayout) findViewById(R.id.layout4);
+            layout1.setVisibility(View.INVISIBLE);
+            layout2.setVisibility(View.INVISIBLE);
+            layout3.setVisibility(View.INVISIBLE);
+            layout4.setVisibility(View.INVISIBLE);
         
 
         ImageView butSend = (ImageView) findViewById(R.id.boton_send);
