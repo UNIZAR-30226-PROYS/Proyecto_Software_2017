@@ -25,6 +25,14 @@ public class Menu extends AppCompatActivity {
                startActivity(new Intent(Menu.this, Busqueda.class));
             }
         });
+
+        ImageView btnLibrary= (ImageView) findViewById(R.id.btn_library);
+        btnLibrary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Menu.this, Libros.class));
+            }
+        });
         
     }
 
