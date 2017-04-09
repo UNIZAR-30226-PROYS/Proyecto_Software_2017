@@ -83,5 +83,61 @@ public class CustomArrayAdapter extends ArrayAdapter<Row> implements
         Toast.makeText(this.getContext(), "Fila " + position, Toast.LENGTH_SHORT).show();
     }
 
-    
+    static class Holder
+    {
+        TextView textViewTitulo;
+        TextView textViewAutor;
+        TextView textViewUsuario;
+        TextView textViewDist;
+        Button button;
+
+        public TextView getTextViewTitulo()
+        {
+            return textViewTitulo;
+        }
+
+        public void setTextViewTitulo(TextView textViewTitle)
+        {
+            this.textViewTitulo = textViewTitle;
+        }
+
+        public TextView getTextViewAutor()
+        {
+            return textViewAutor;
+        }
+
+        public void setTextViewAutor(TextView textViewAutor)
+        {
+            this.textViewAutor = textViewAutor;
+        }
+
+        public TextView getTextViewUsuario()
+        {
+            return textViewUsuario;
+        }
+
+        public void setTextViewUsuario(TextView textViewUsuario)
+        {
+            this.textViewUsuario = textViewUsuario;
+        }
+
+        public TextView getTextViewDist()
+        {
+            return textViewDist;
+        }
+
+        public void setTextViewDist(TextView textViewDist)
+        {
+            this.textViewDist = textViewDist;
+        }
+        public Button getButton()
+        {
+            return button;
+        }
+        public void setButton(Button b)
+        {
+            this.button = b;
+        }
+
+    }
 }
