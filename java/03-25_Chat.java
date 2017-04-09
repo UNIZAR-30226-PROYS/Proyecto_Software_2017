@@ -86,7 +86,22 @@ public class Chat extends AppCompatActivity {
 
     }
 
-   
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == 2) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+
+                LinearLayout layout4 = (LinearLayout) findViewById(R.id.layout4);
+                layout4.setVisibility(View.VISIBLE);
+                TextView texto = (TextView) findViewById(R.id.textView5);
+                texto.setText("Estas son mis coordenadas: " + data.getDataString());
+
+
+            }
+        }
+    }
 
 
 
