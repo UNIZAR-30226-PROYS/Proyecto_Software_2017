@@ -37,7 +37,7 @@ public class Chat extends AppCompatActivity {
     int huecoLibre = 0;
     double lat = 0.0;
     double lon = 0.0;
-
+    int numMensajes = 0;
 
 
     @Override
@@ -45,7 +45,7 @@ public class Chat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         setTitle("Chat con <LEGENDANNY>");
-        
+        if(numMensajes == 0){
             LinearLayout layout1 = (LinearLayout) findViewById(R.id.layout1);
             LinearLayout layout2 = (LinearLayout) findViewById(R.id.layout2);
             LinearLayout layout3 = (LinearLayout) findViewById(R.id.layout3);
@@ -54,18 +54,31 @@ public class Chat extends AppCompatActivity {
             layout2.setVisibility(View.INVISIBLE);
             layout3.setVisibility(View.INVISIBLE);
             layout4.setVisibility(View.INVISIBLE);
-        
+        }
 
         ImageView butSend = (ImageView) findViewById(R.id.boton_send);
         butSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              
+                if(numMensajes == 0){
                     LinearLayout layout1 = (LinearLayout) findViewById(R.id.layout1);
                     layout1.setVisibility(View.VISIBLE);
                     TextView texto = (TextView) findViewById(R.id.textView);
                     texto.setText("Hola! Soy Daniel. Estoy interesado en tus ultimos dos libros, porque me gusta mucho Dan Brown. ¿Podríamos quedar para itnercambiarlos?");
                     numMensajes++;
+                } else if(numMensajes == 1){
+                    LinearLayout layout2 = (LinearLayout) findViewById(R.id.layout2);
+                    layout2.setVisibility(View.VISIBLE);
+                    TextView texto = (TextView) findViewById(R.id.textView1);
+                    texto.setText("Si claro, ¿Qué día quieres quedar?");
+                    numMensajes++;
+                } else if(numMensajes == 2){
+                    LinearLayout layout3 = (LinearLayout) findViewById(R.id.layout3);
+                    layout3.setVisibility(View.VISIBLE);
+                    TextView texto = (TextView) findViewById(R.id.textView3);
+                    texto.setText("Me iría bien la semana que viene. \n No obstante, igual no puedo acudir porque tengo viajes de negocio. \n SI te parece bien, te aviso en cuanto pueda. \n De todas maneras, envíame tus coordenadas y así acudo ahí mismo.");
+                    numMensajes++;
+                }
 
 
             }
