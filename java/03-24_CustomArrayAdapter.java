@@ -71,7 +71,17 @@ public class CustomArrayAdapter extends ArrayAdapter<Row> implements
 
         return convertView;
     }
-    
+    @Override
+    public void onClick(View v) {
+
+        Button button = (Button) v;
+        int position = (Integer) v.getTag();
+        /*getItem(position).setChecked(checkBox.isChecked());
+
+        String msg = this.getContext().getString(R.string.check_toast,
+                position, checkBox.isChecked());*/
+        Toast.makeText(this.getContext(), "Fila " + position, Toast.LENGTH_SHORT).show();
+    }
 
     
 }
