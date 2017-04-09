@@ -29,7 +29,16 @@ public class Novedades extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         setTitle("Novedades");
 
-        
+        Button closeButton = (Button) findViewById(R.id.botonCerrar);
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                Intent i = new Intent(Novedades.this, Menu.class);
+                startActivity(i);
+            }
+
+        });
 
         mList = (ListView)findViewById(R.id.list);
         fillData();
