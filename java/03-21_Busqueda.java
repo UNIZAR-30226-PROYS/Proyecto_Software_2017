@@ -122,7 +122,54 @@ public class Busqueda extends AppCompatActivity {
                     lon = Float.parseFloat(lonE.getText().toString());
                 }
 
-                
+                String titS = titulo.getText().toString();
+                String autS = autor.getText().toString();
+                String usrS = usuario.getText().toString();
+                String citS = ciudad.getText().toString();
+                String error = "";
+
+                if ((cooB.isChecked()) && (lat < -90.0 || lat > 90.0)){
+                    errorLoc.setTextColor(Color.RED);
+                    error = "Mala latitud.";
+                    errorLoc.setText(error);
+                    fallo = true;
+                } else if ((cooB.isChecked()) && (lon < -180.0 || lon > 180.0)){
+                    error = "Mala longitud.";
+                    errorLoc.setTextColor(Color.RED);
+                    errorLoc.setText(error);
+                    fallo = true;
+                } else if ((citB.isChecked()) && (citS.equals(""))){
+                    error = "Introduzca una ciudad.";
+                    errorLoc.setText(error);
+                    errorLoc.setTextColor(Color.RED);
+                    fallo = true;
+                } else if ((!citB.isChecked()) && (!cooB.isChecked())){
+                    error = "Seleccione una opción.";
+                    errorLoc.setText(error);
+                    errorLoc.setTextColor(Color.RED);
+                    fallo = true;
+                }
+
+                if (titS.equals("")){
+                    errorTitulo.setTextColor(Color.RED);
+                    error = "Introduzca título";
+                    errorTitulo.setText(error);
+                    fallo = true;
+                }
+
+                if (autS.equals("")){
+                    errorAutor.setTextColor(Color.RED);
+                    error = "Introduzca autor";
+                    errorAutor.setText(error);
+                    fallo = true;
+                }
+
+                if (usrS.equals("")){
+                    errorUsuario.setTextColor(Color.RED);
+                    error = "Introduzca usuario";
+                    errorUsuario.setText(error);
+                    fallo = true;
+                }
 
                 if(!fallo){
                     startActivity(new Intent(Busqueda.this, Resultados.class));
