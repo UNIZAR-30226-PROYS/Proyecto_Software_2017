@@ -66,7 +66,21 @@ public class Menu extends AppCompatActivity {
             }
         });
 
-        
+        ImageView addLib = (ImageView) findViewById(R.id.addBook);
+        addLib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Menu.this, AddLibro.class));
+            }
+        });
+
+        ImageView delLib = (ImageView) findViewById(R.id.deleteBook);
+        delLib.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Menu.this, DeleteLibro.class));
+            }
+        });
     }
 
 
