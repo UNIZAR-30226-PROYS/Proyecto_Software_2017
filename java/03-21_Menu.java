@@ -42,6 +42,14 @@ public class Menu extends AppCompatActivity {
              }
         });
 
+        ImageView btnHistory= (ImageView) findViewById(R.id.btn_history);
+        btnHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Menu.this, Historial.class));
+            }
+        });
+
        
 
         
