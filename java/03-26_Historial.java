@@ -69,7 +69,30 @@ public class Historial extends AppCompatActivity {
         }
         mList.setAdapter(notes);*/
 
-      
+        //Simulamos que extraemos los datos de la base de datos a un cursor
+        /*String[] columnasBD = new String[] {"_id", "titulo", "autor", "distancia", "usuario"};
+        MatrixCursor c = new MatrixCursor(columnasBD);
+
+
+        c.addRow(new Object[] {"0","En busca del tiempo perdido", "Marcel Proust", "1 km", "Juan123"});
+        c.addRow(new Object[] {"1","Harry Potter y el legado maldito", "J. K. Rowling", "1 km", "Vic93"});
+        c.addRow(new Object[] {"2","Poeta en Nueva York", "Federico García Lorca", "2 km", "Aniita94"});
+        c.addRow(new Object[] {"3","El Corredor Del Laberinto 1", "Dashner James", "4 km", "Teresa"});
+        c.addRow(new Object[] {"4","Los Juegos Del Hambre", "Suzanne Collins", "4 km", "usuario6"});
+        c.addRow(new Object[] {"5","Peter Pan", "James Matthew Barrie", "4 km", "Pedro.Garcia"});
+
+        //Añadimos los datos al Adapter y le indicamos donde dibujar cada dato en la fila del Layout
+        String[] from = new String[] { "titulo", "autor", "distancia", "usuario" };
+        int[] to = new int[] { R.id.tituloH,  R.id.autorH, R.id.distH, R.id.usuarioH  };
+        SimpleCursorAdapter rows =
+                new SimpleCursorAdapter(this, R.layout.history_rows, c, from, to);
+
+        if (!rows.isEmpty()){
+            TextView empty = (TextView) findViewById(R.id.empty);
+            empty.setWidth(0);
+        }
+
+        mList.setAdapter(rows);*/
 
         
 
