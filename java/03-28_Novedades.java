@@ -27,7 +27,23 @@ public class Novedades extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+        setTitle("Novedades");
+
         
+
+        mList = (ListView)findViewById(R.id.list);
+        fillData();
+
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                    long arg3) {
+                Intent i = new Intent(Novedades.this, Chat.class);
+                startActivity(i);
+            }
+        });
 
     }
 
