@@ -61,7 +61,11 @@ public class Chat extends AppCompatActivity {
             @Override
             public void onClick(View view) {
               
-                    
+                    LinearLayout layout1 = (LinearLayout) findViewById(R.id.layout1);
+                    layout1.setVisibility(View.VISIBLE);
+                    TextView texto = (TextView) findViewById(R.id.textView);
+                    texto.setText("Hola! Soy Daniel. Estoy interesado en tus ultimos dos libros, porque me gusta mucho Dan Brown. ¿Podríamos quedar para itnercambiarlos?");
+                    numMensajes++;
 
 
             }
@@ -72,7 +76,8 @@ public class Chat extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-              
+                Intent intent = new Intent(Chat.this, Chat_GPS.class);
+                startActivityForResult(intent,2);
             }
         });
 
