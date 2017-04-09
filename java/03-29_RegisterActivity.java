@@ -75,8 +75,24 @@ public class RegisterActivity extends AppCompatActivity{
             cancel = true;
         }
 
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            mUsuario.setError(getString(R.string.error_field_required));
+            focusView = mUsuario;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            mUsuario.setError(getString(R.string.error_invalid_email));
+            focusView = mUsuario;
+            cancel = true;
+        }
 
-        
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(ciudad)) {
+            mCiudad.setError(getString(R.string.error_field_required));
+            focusView = mCiudad;
+            cancel = true;
+        }
+
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -89,5 +105,8 @@ public class RegisterActivity extends AppCompatActivity{
         }
     }
 
-    
+    private boolean isEmailValid(String email) {
+
+        return email.contains("@");
+    }
 }
