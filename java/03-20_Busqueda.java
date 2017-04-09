@@ -81,7 +81,32 @@ public class Busqueda extends AppCompatActivity {
             }
         });
 
-       
+        Button buttonAtras = (Button) findViewById(R.id.button_patras);
+        buttonAtras.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View view) {
+                  //startActivity(new Intent(Busqueda.this, Menu.class));
+                  finish();
+              }
+        });
+
+        Button buttonBusqueda = (Button) findViewById(R.id.button_busqueda);
+        buttonBusqueda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+
+                boolean fallo = false;
+
+                
+
+                
+
+                if(!fallo){
+                    startActivity(new Intent(Busqueda.this, Resultados.class));
+                }
+            }
+        });
 
         
  
