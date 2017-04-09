@@ -32,5 +32,26 @@ public class Novedades extends AppCompatActivity {
     }
 
 
+    private void fillData(){
+        
+
+    }
+
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fillData();
+    }
+
 
 }
