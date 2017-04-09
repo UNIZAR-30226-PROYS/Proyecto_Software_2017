@@ -55,7 +55,25 @@ public class Historial extends AppCompatActivity {
 
 
     private void fillData(){
-       
+        // Get all of the notes from the database and create the item list
+        /*Cursor c = mDbHelper.fetchAllNotes();
+        startManagingCursor(c);
+        String[] from = new String[] {  NotesDbAdapter.KEY_TITLE, NotesDbAdapter.KEY_TITLE, NotesDbAdapter.KEY_TITLE, NotesDbAdapter.KEY_TITLE };
+        int[] to = new int[] { R.id.titulo, R.id.usuario,  R.id.autor, R.id.dist  };
+        // Now create an array adapter and set it to display using our row
+        SimpleCursorAdapter notes =
+                new SimpleCursorAdapter(this, R.layout.novedades_rows, c, from, to);
+        if (!notes.isEmpty()){
+            TextView empty = (TextView) findViewById(R.id.empty);
+            empty.setWidth(0);
+        }
+        mList.setAdapter(notes);*/
+
+      
+
+        
+
+
 
     }
 
