@@ -94,7 +94,29 @@ public class Historial extends AppCompatActivity {
 
         mList.setAdapter(rows);*/
 
-        
+        List<Row> rows = new ArrayList<Row>(30);
+        Row row = null;
+        /*for (int i = 1; i < 31; i++) {
+            row = new Row("Title " + i, "Autor " + i, "Usuario " + i, (long) i);
+
+            rows.add(row);
+        }*/
+        rows.add(new Row("En busca del tiempo perdido", "Marcel Proust", "Juan123", (long) 1));
+        rows.add(new Row("Harry Potter y la piedra filosofaaaaal", "J. K. Rowling", "Vic93", (long) 1));
+        rows.add(new Row("Poeta en Nueva York", "Federico García Lorca", "Aniita94", (long) 2));
+        rows.add(new Row("El Corredor Del Laberinto 1", "Dashner James", "Teresa", (long) 4));
+        rows.add(new Row("Los Juegos Del Hambre", "Suzanne Collins","usuario6", (long) 4));
+        rows.add(new Row("Peter Pan", "James Matthew Barrie", "Pedro.Garcia", (long) 4));
+
+        if (!rows.isEmpty()){
+            TextView empty = (TextView) findViewById(R.id.empty);
+            empty.setWidth(0);
+        }
+
+        CustomArrayAdapter c = new CustomArrayAdapter(this, rows);
+        c.setIds(R.layout.history_rows, R.id.autorH,R.id.tituloH, R.id.usuarioH, R.id.distH, R.id.botonListH);
+
+        mList.setAdapter(c);
 
 
 
