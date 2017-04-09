@@ -59,7 +59,24 @@ public class RegisterActivity extends AppCompatActivity{
         String ciudad = mCiudad.getText().toString();
 
         boolean cancel = false;
-       
+        View focusView = null;
+
+        // Check for a valid password, if the user entered one.
+        if (TextUtils.isEmpty(password) || !(password.length()>4)) {
+            mPassword1.setError(getString(R.string.error_invalid_password));
+            focusView = mPassword1;
+            cancel = true;
+        }
+
+        // Check for a valid password, if the user entered one.
+        if (TextUtils.isEmpty(password2) || !(password2.length()>4) || !(password2.equals(password))) {
+            mPassword2.setError(getString(R.string.error_incorrect_password));
+            focusView = mPassword2;
+            cancel = true;
+        }
+
+
+        
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
