@@ -38,13 +38,44 @@ public class Libros extends AppCompatActivity {
 
         setContentView(R.layout.activity_list);
         setTitle("Libros favoritos");
-        
+        Button closeButton = (Button) findViewById(R.id.botonCerrar);
+
+        closeButton.setVisibility(View.INVISIBLE);
+        mList = (ListView) findViewById(R.id.list);
+
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                // ListView Clicked item index
+                long itemPosition = id;
+
+                // ListView Clicked item value
+                //int  itemValue    = mList.getitem
+
+                // Show Alert
+                Toast.makeText(getApplicationContext(), "Hiciste click en el número " + itemPosition,
+                        Toast.LENGTH_LONG).show();
+                // Intent i = new Intent(LibrosFavoritos.this, Busqueda.class);
+                // startActivity(i);
+            }
+        });
+
+
+        fillData();
+
+
 
 
     }
 
 
+    private void fillData() {
 
+
+
+    }
 
 
 
