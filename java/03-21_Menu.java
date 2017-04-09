@@ -33,6 +33,17 @@ public class Menu extends AppCompatActivity {
                 startActivity(new Intent(Menu.this, Libros.class));
             }
         });
+
+        ImageView btnProfile= (ImageView) findViewById(R.id.btn_profile);
+        btnProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Menu.this, Perfil.class));
+             }
+        });
+
+       
+
         
     }
 
