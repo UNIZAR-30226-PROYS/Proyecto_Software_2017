@@ -46,7 +46,30 @@ public class RegisterActivity extends AppCompatActivity{
 
     private void attemptRegister() {
 
-        
+        // Reset errors.
+        mUsuario.setError(null);
+        mCiudad.setError(null);
+        mPassword1.setError(null);
+        mPassword2.setError(null);
+
+        // Store values at the time of the login attempt.
+        String email = mUsuario.getText().toString();
+        String password = mPassword1.getText().toString();
+        String password2 = mPassword2.getText().toString();
+        String ciudad = mCiudad.getText().toString();
+
+        boolean cancel = false;
+       
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            startActivity(new Intent(RegisterActivity.this, Menu.class));
+        }
     }
 
     
