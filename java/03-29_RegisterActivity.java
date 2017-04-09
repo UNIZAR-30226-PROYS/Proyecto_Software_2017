@@ -29,11 +29,25 @@ public class RegisterActivity extends AppCompatActivity{
 
         setTitle("Registrarse");
 
- 
+        mUsuario = (EditText) findViewById(R.id.emailRg);
+        mCiudad = (EditText) findViewById(R.id.ciudadRg);
+        mPassword1 = (EditText) findViewById(R.id.passwordRg);
+        mPassword2 = (EditText) findViewById(R.id.passwordRepeatRg);
+
+        Button btn = (Button) findViewById(R.id.resgister_button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    attemptRegister();
+            }
+        });
 
     }
 
- 
+    private void attemptRegister() {
+
+        
+    }
 
     
 }
