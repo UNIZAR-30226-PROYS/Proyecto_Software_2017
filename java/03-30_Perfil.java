@@ -69,5 +69,15 @@ public class Perfil extends AppCompatActivity{
 
     
 
-    
+    private boolean isEmailValid(String email) {
+
+        return email.contains("@");
+    }
+
+    void eliminarUsuario(){
+        //Eliminar usuario BBDD
+
+        Intent i = new Intent(Perfil.this, LoginActivity.class);
+        startActivity(i);
+    }
 }
