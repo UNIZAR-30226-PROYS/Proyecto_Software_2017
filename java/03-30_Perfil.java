@@ -111,6 +111,17 @@ public class Perfil extends AppCompatActivity{
         }
 
 
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            mUsuario.setError(getString(R.string.error_field_required));
+            focusView = mUsuario;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            mUsuario.setError(getString(R.string.error_invalid_email));
+            focusView = mUsuario;
+            cancel = true;
+        }
+
         
         
 
