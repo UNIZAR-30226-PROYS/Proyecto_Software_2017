@@ -55,7 +55,29 @@ public class PerfilUsuarios extends AppCompatActivity {
             }
         });
 
-        
+        Button f = (Button) findViewById(R.id.fav_button);
+
+        // Activar o desactivar el boton favorito dependiendo de si esta en su lista de favs o no
+
+        f.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button button = (Button) v;
+                if (button.isActivated()){
+                    button.setBackgroundResource(R.drawable.ic_slide_switch_on);
+                    Toast.makeText(getApplicationContext(), "Guardado como favorito",
+                            Toast.LENGTH_SHORT).show();
+                    button.setActivated(false);
+                }
+                else{
+                    button.setBackgroundResource(R.drawable.ic_slide_switch_off);
+
+                    Toast.makeText(getApplicationContext(), "Favorito borrado",
+                            Toast.LENGTH_SHORT).show();
+                    button.setActivated(true);
+                }
+            }
+        });
 
     }
 }
