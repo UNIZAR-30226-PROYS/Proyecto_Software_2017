@@ -67,7 +67,41 @@ public class Perfil extends AppCompatActivity{
 
     }
 
-    
+    void comprobar(){
+        // Reset errors.
+        mUsuario.setError(null);
+        mCiudad.setError(null);
+        mOldPass.setError(null);
+        mNewPass.setError(null);
+        mReNewPass.setError(null);
+
+        // Store values at the time of the login attempt.
+        String email = mUsuario.getText().toString();
+        String oldPass = mOldPass.getText().toString();
+        String newPass = mNewPass.getText().toString();
+        String rePass = mReNewPass.getText().toString();
+        String ciudad = mCiudad.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        
+
+
+        
+        
+
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            startActivity(new Intent(Perfil.this, Menu.class));
+        }
+    }
 
     private boolean isEmailValid(String email) {
 
