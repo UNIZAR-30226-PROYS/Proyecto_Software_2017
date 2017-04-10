@@ -35,7 +35,25 @@ public class PerfilUsuarios extends AppCompatActivity {
             }
         });
 
-        
+        Button c = (Button) findViewById(R.id.contactar_button);
+
+        c.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PerfilUsuarios.this, Chat.class);
+                startActivity(i);
+            }
+        });
+
+        Button l = (Button) findViewById(R.id.libros_button);
+
+        l.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(PerfilUsuarios.this, Libros.class);
+                startActivity(i);
+            }
+        });
 
         
 
