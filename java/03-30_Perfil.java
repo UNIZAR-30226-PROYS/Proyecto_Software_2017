@@ -39,7 +39,29 @@ public class Perfil extends AppCompatActivity{
         RatingBar valmed = (RatingBar) findViewById(R.id.valoracion);
         valmed.setEnabled(false);
 
-        
+        Button guardar = (Button) findViewById(R.id.button_guardar);
+        Button eliminar = (Button) findViewById(R.id.button_eliminar);
+        Button cancelar = (Button) findViewById(R.id.button_cancelar);
+
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                comprobar();
+            }
+        });
+        eliminar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                eliminarUsuario();
+            }
+        });
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Perfil.this, Menu.class);
+                startActivity(i);
+            }
+        });
 
 
 
