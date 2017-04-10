@@ -122,8 +122,12 @@ public class Perfil extends AppCompatActivity{
             cancel = true;
         }
 
-        
-        
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(ciudad)) {
+            mCiudad.setError(getString(R.string.error_field_required));
+            focusView = mCiudad;
+            cancel = true;
+        }
 
 
         if (cancel) {
