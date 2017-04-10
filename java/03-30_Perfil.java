@@ -17,7 +17,11 @@ import android.widget.TextView;
 
 public class Perfil extends AppCompatActivity{
 
-   
+    private EditText mUsuario;
+    private EditText mCiudad;
+    private EditText mOldPass;
+    private EditText mNewPass;
+    private EditText mReNewPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,18 @@ public class Perfil extends AppCompatActivity{
         setTitle("Mi Perfil");
 
         setContentView(R.layout.activity_perfil);
+
+        mUsuario = (EditText) findViewById(R.id.user_email);
+        mCiudad = (EditText) findViewById(R.id.user_city);
+        mOldPass = (EditText) findViewById(R.id.oldPass);
+        mNewPass = (EditText) findViewById(R.id.oldPass);
+        mReNewPass = (EditText) findViewById(R.id.oldPass);
+
+        RatingBar valmed = (RatingBar) findViewById(R.id.valoracion);
+        valmed.setEnabled(false);
+
+        
+
 
 
     }
