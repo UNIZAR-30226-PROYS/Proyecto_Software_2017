@@ -18,6 +18,22 @@ public class PerfilUsuarios extends AppCompatActivity {
         // Poner como titulo el nombre del usuario
         setTitle("Perfil Usuario");
 
+        RatingBar valmed = (RatingBar) findViewById(R.id.val_media);
+        valmed.setEnabled(false);
+
+        final RatingBar valoracion = (RatingBar) findViewById(R.id.nueva_val);
+        Button v = (Button) findViewById(R.id.valorar_button);
+
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Float rating = valoracion.getRating();
+                Toast.makeText(getApplicationContext(), "Valoracion: " + rating,
+                        Toast.LENGTH_SHORT).show();
+                // Calcular valoración media y guardar en la BBDD
+                // Actualizar pagina para que se muestre la nueva valoración media??
+            }
+        });
 
         
 
