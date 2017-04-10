@@ -75,6 +75,31 @@ public class Resultados extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        saveState();
+        //outState.putSerializable(CategoryDbAdapter.KEY_ROWID, mRowId);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveState();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fillData();
+    }
+
+    private void saveState() {
+        Intent i = new Intent(this,Menu.class);
+        startActivity(i);
+    }
+
+    public void onCambiar(){
+
+    }
 
 
 
