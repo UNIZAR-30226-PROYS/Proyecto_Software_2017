@@ -85,7 +85,30 @@ public class Perfil extends AppCompatActivity{
         boolean cancel = false;
         View focusView = null;
 
-        
+        // Comprobar contraseña en el caso en el que el usuario la haya cambiado
+        if( !TextUtils.isEmpty(newPass) || !TextUtils.isEmpty(rePass)) {
+            // Contraseña del usuario incorrecta
+            if (TextUtils.isEmpty(oldPass)) {
+                /***********************************************************
+                 * Si el campo de la contraseña esta vacío o no coincide con la contreseña del usuario
+                 */
+                mOldPass.setError(getString(R.string.error_incorrect_password));
+                focusView = mOldPass;
+                cancel = true;
+            }
+            // Nueva contraseña incorrecta
+            else if(TextUtils.isEmpty(newPass) || newPass.length()<=4){
+                mNewPass.setError(getString(R.string.error_invalid_password));
+                focusView = mNewPass;
+                cancel = true;
+            }
+            // Contraseña repetida no coincide
+            else if(TextUtils.isEmpty(rePass) || !newPass.equals(rePass)){
+                mReNewPass.setError(getString(R.string.error_incorrect_password));
+                focusView = mReNewPass;
+                cancel = true;
+            }
+        }
 
 
         
