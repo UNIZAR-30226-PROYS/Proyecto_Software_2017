@@ -69,6 +69,47 @@ public class DeleteLibro extends AppCompatActivity {
 
 
 
+        rows.add(new Row("50 sombras de Grey", "Anonimo", "", (long) 0));
+        rows.add(new Row("51 sombras de Grey", "Anonimo", "", (long) 0));
+        rows.add(new Row("52 sombras de Grey", "Anonimo", "", (long) 0));
+        rows.add(new Row("53 sombras de Grey", "Anonimo", "", (long) 0));
+        rows.add(new Row("54 sombras de Grey", "Anonimo", "", (long) 0));
+        rows.add(new Row("55 sombras de Grey", "Anonimo", "", (long) 0));
+        rows.add(new Row("56 sombras de Grey", "Anonimo", "", (long) 0));
+        rows.add(new Row("57 sombras de Grey", "Anonimo", "", (long) 0));
+        rows.add(new Row("58 sombras de Grey", "Anonimo", "", (long) 0));
+
+
+
+
+        if (!rows.isEmpty()) {
+            TextView empty = (TextView) findViewById(R.id.empty);
+            empty.setWidth(0);
+        }
+
+        CustomArrayAdapter c = new CustomArrayAdapter(this, rows) {
+            @Override
+            public void onClick(View v) {
+                Button button = (Button) v;
+
+                if (button.isActivated()) {
+                    button.setBackgroundResource(R.drawable.ic_slide_switch_on);
+                    Toast.makeText(getApplicationContext(), "Guardado como favorito",
+                            Toast.LENGTH_SHORT).show();
+                    button.setActivated(false);
+                } else {
+                    button.setBackgroundResource(R.drawable.ic_slide_switch_off);
+
+                    Toast.makeText(getApplicationContext(), "Favorito borrado",
+                            Toast.LENGTH_SHORT).show();
+                    button.setActivated(true);
+                }
+            }
+        };
+
+        c.setIds(R.layout.activity_libros, R.id.ciudadMiLi, R.id.nombreMiLi, R.id.usuarioMiLi, R.id.distMiLi, R.id.FavMiLi);
+
+        mList.setAdapter(c);
 
 
     }
