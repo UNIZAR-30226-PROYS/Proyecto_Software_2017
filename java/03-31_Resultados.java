@@ -54,7 +54,24 @@ public class Resultados extends AppCompatActivity {
 
 
     private void fillData(){
-        
+        List<Row> rows = new ArrayList<Row>(30);
+        Row row = null;
+
+
+        rows.add(new Row("El Corredor Del Laberinto 1", "Dashner James", "Teresa", (long) 4));
+        rows.add(new Row("El Corredor Del Laberinto 2", "Dashner James", "Teresa", (long) 4));
+        rows.add(new Row("El Corredor Del Laberinto 3", "Dashner James", "Teresa", (long) 4));
+
+        if (!rows.isEmpty()){
+            TextView empty = (TextView) findViewById(R.id.empty);
+            empty.setWidth(0);
+        }
+
+        CustomArrayAdapter c = new CustomArrayAdapter(this, rows);
+        c.setIds(R.layout.resultados_rows, R.id.autorR,R.id.tituloR, R.id.usuarioR, R.id.distR, R.id.botonListR);
+
+        mList.setAdapter(c);
+
 
     }
 
