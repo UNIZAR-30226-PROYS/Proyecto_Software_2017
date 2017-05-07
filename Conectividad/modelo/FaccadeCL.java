@@ -1,6 +1,7 @@
 package modelo;
 
-import datos.*;
+import modelo.datos.*;
+import controlador.datos.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -33,13 +34,13 @@ public class FaccadeCL{
 	 * Actualiza un usuario existente en la base de datos, 
 	 * acorde al valor de user
 	 */
-	public void updateUser(UsuariosVO user) throws SQLException {}
+	public void updateUser(UsuariosVO user, UsuariosVO updated_user) throws SQLException {}
 	
 	/*
 	 * Devuelve un usuario de la base de datos que concida con
 	 * user
 	 */
-	public UsuariosVO getUser(UsuariosVO user) throws SQLException{
+	public Usuarios getUser(UsuariosVO user, UsuariosVO user_s) throws SQLException{
 		return null;
 	}
 	
@@ -64,7 +65,7 @@ public class FaccadeCL{
 	 * Devuelve un libro de la base de datos cuyo valor
 	 * corresponda con el de book
 	 */
-	public LibrosVO getBook(LibrosVO book) throws SQLException{
+	public Libros getBook(UsuariosVO user, LibrosVO book) throws SQLException{
 		return null;
 	}
 	
@@ -72,16 +73,24 @@ public class FaccadeCL{
 	 * Devuelve una lista de libros de la base de datos 
 	 * cuyos valores correspondan con el de book
 	 */
-	public ArrayList<LibrosVO> searchBook(LibrosVO book) throws SQLException{
-		return new ArrayList<LibrosVO>();
+	public ListaLibros searchBook(LibrosVO book) throws SQLException{
+		return null;
+	}
+	
+	/*
+	 * Devuelve una lista de libros favoritos para el
+	 * usuario user
+	 */
+	public ListaLibros searchFavBook(UsuariosVO user) throws SQLException{
+		return null;
 	}
 	
 	/*
 	 * Devuelve una lista de usuarios favoritos para el
 	 * usuario user
 	 */
-	public ArrayList<UsuariosVO> searchFavUser(UsuariosVO user) throws SQLException{
-		return new ArrayList<UsuariosVO>();
+	public ListaUsuarios searchFavUser(UsuariosVO user) throws SQLException{
+		return null;
 	}
 	
 	/*
@@ -91,8 +100,20 @@ public class FaccadeCL{
 	public void addFavUser(Lista_usuariosVO favUsr) throws SQLException{}
 	
 	/*
+	 * Borra un nuevo usuario favorito que corresponda con 
+	 * favUsr
+	 */
+	public void deleteFavUser(Lista_usuariosVO favUsr) throws SQLException{}
+	
+	/*
 	 * Inserta un nuevo libro favorito que corresoponda con 
 	 * favBook
 	 */
 	public void addFavBook(Lista_librosVO favBook) throws SQLException{}
+	
+	/*
+	 * Borra un nuevo libro favorito que corresoponda con 
+	 * favBook
+	 */
+	public void deleteFavBook(Lista_librosVO favBook) throws SQLException{}
 }
