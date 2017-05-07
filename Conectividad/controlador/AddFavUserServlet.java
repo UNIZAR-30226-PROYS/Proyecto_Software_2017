@@ -15,13 +15,13 @@ import modelo.datos.*;
 /**
  * Servlet implementation class CrearUsuarioServlet
  */
-public class DeleteUserServlet extends HttpServlet {
+public class AddFavUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * Default constructor. 
      */
-    public DeleteUserServlet() {
+    public AddFavUserServlet() {
         // TODO Auto-generated constructor stub
     }
 
@@ -41,22 +41,27 @@ public class DeleteUserServlet extends HttpServlet {
 		} else
 			error += "\tFalta el parametro nick\n";
 		
-		String password = req.getParameter("password");
-		if (password != null){
-			if (!password.trim().equals(new String("")))
-				password = password.trim();
+		
+		String fav_nick = req.getParameter("fav_nick");
+		if (fav_nick != null){
+			if (!fav_nick.trim().equals(new String("")))
+				fav_nick = fav_nick.trim();
 			else
-				error += "\tLa contrasenya no tiene valor\n";
+				error += "\tEl usuario favorito no tiene valor\n";
 		} else
-			error += "\tFalta el parametro password\n";
+			error += "\tFalta el parametro fav_nick\n";
 		
 		
 		if (error.equals("")){
-			UsuariosVO usuario = new UsuariosVO(nick, "", "", new BigDecimal(0),
-												password, null, null, null);
+			UsuariosVO usuario = new UsuariosVO(nick, null, null, new BigDecimal(0),
+												null, null, null, null);
+			UsuariosVO usr_favorito = new UsuariosVO(fav_nick, null, null,
+													new BigDecimal(0),
+													null, null, null, null);
+			Lista_usuariosVO fav = new Lista_usuariosVO(0, usuario, usr_favorito);
 			try{
 				FaccadeCL fachada = new FaccadeCL ();
-				fachada.deleteUser(usuario);
+				fachada.addFavUser(fav);
 			}catch (Exception e){
 				resp.sendError(500, e.getMessage());
 				e.printStackTrace(System.err);

@@ -15,13 +15,13 @@ import modelo.datos.*;
 /**
  * Servlet implementation class CrearUsuarioServlet
  */
-public class DeleteUserServlet extends HttpServlet {
+public class AddFavBookServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * Default constructor. 
      */
-    public DeleteUserServlet() {
+    public AddFavBookServlet() {
         // TODO Auto-generated constructor stub
     }
 
@@ -41,22 +41,27 @@ public class DeleteUserServlet extends HttpServlet {
 		} else
 			error += "\tFalta el parametro nick\n";
 		
-		String password = req.getParameter("password");
-		if (password != null){
-			if (!password.trim().equals(new String("")))
-				password = password.trim();
-			else
-				error += "\tLa contrasenya no tiene valor\n";
+		
+		String id_book_s = req.getParameter("id_book");
+		int id_book = -1;
+		if (id_book_s != null){
+			if (!id_book_s.trim().equals(new String(""))) {
+				id_book_s = id_book_s.trim();
+				id_book = Integer.parseInt(id_book_s);
+			} else
+				error += "\tEl libro favorito no tiene valor\n";
 		} else
-			error += "\tFalta el parametro password\n";
+			error += "\tFalta el parametro id_book\n";
 		
 		
 		if (error.equals("")){
-			UsuariosVO usuario = new UsuariosVO(nick, "", "", new BigDecimal(0),
-												password, null, null, null);
+			UsuariosVO usuario = new UsuariosVO(nick, null, null, new BigDecimal(0),
+												null, null, null, null);
+			LibrosVO libro_fav = new LibrosVO(id_book, null, null, null, null, null);
+			Lista_librosVO fav = new Lista_librosVO(0, libro_fav, usuario);
 			try{
 				FaccadeCL fachada = new FaccadeCL ();
-				fachada.deleteUser(usuario);
+				fachada.addFavBook(fav);
 			}catch (Exception e){
 				resp.sendError(500, e.getMessage());
 				e.printStackTrace(System.err);
