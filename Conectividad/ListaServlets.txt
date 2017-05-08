@@ -1,0 +1,64 @@
+﻿Nº - Servlet(hay 14)		Metodo				Parametros - Descripcion				Anotaciones
+===================================================================================================================
+1 - InsertUserServlet		POST				nick - Nick a anyadir				Inserta un nuevo usuario
+								password - Contraseña
+								nombre - nombre del user
+								apellidos - apellidos del user
+												
+2 - DeleteUserServlet		POST				nick - Nick a borrar				Borra un usuario
+								password - Contraseña del user
+												
+3 - ModifyUserServlet		POST				nick - Nick a modificar				Modifica un usuario. Los parametros
+								passowrd - contraseña del modificado		con asterisco pueden ser nulos. Si son
+								new_password* - nueva contraseña		nulos no se modificara el atributo
+								nombre* - nuevo nombre				correspondiente
+								apellidos* - nuevos apellidos
+								valoration* - nueva valoracion
+												
+4 - InsertBookServlet		POST				nick - Nick del dueño				Inserta un nuevo libro
+								password - Contraseña del dueño
+								tittle - Titulo del libro
+								author - Autor del libro
+								location - En coordenadas
+								description - Puede estar vacio
+												
+5 - DeleteBookServlet		POST				nick - Nick del dueño del libro			Borra un libro
+								password - contraseña del dueño
+								id_book - Id del libro a borrar
+												
+6 - AddFavBookServlet		POST				nick - Nick del user				Añade un libro a la lista de favoritos
+								id_book - libro a añadir a favs			del usuario cuyo nick es "nick"
+												
+7 - AddFavUserServlet		POST				nick - Nick del user				Añade un usuario a la lista de favoritos
+								fav_nick - Nick del user fav			del usuario cuyo nick es "nick"
+												
+8 - DeleteFavBookServlet	POST				nick - Nick del que busca			Borra un libro de favoritos
+								id_book - Libro a quitar de favs
+
+9 - DeleteFavUserServlet	POST				nick - Nick del que busca			Borra un usuario de favoritos
+								fav_nick - User a quitar de favs
+												
+10 - GetUserServlet		GET				nick - Nick del user que busca			Devuelve un xml (ejemplo "GetUnUsuario.xml")
+								nick_s - Nick que se busca			con un usuario
+												
+11 - GetBookServlet		GET				nick - Nick del user que busca			Devuelve un xml (ejemplo "GetUnLibro.xml")
+								id_book - libro que se busca			con un libro
+												
+12 - SearchFavUserServlet	GET				nick - Nick del user que busca			Devuelve todos los usuarios favoritos en
+																						un xml (ejemplo 
+																						"BusquedaDeUsuariosEjemplo.xml")
+																						
+13 - SearchFavBookServlet	GET				nick - Nick del user que busca			Devuelve todos los libros favoritos en 
+																						un xml (ejemplo 
+																						"BusquedaDeUsuariosEjemplo.xml")
+
+14 - SearchBookServlet		GET				nick - Nick del user que busca			Devuelve todos los libros que se 
+								tittle* - Titulo del libro			correspondan con la busqueda de 
+								author* - Autor del libro			los parametros en un xml. Los 
+								location* - Localizacion del libro		parametros con asterisco pueden ser
+								nick_b* - Dueño del libro			nulos y no influiran en la busqueda.
+																						La localizacion se busca como punto
+																						centrico y se busca en un radio
+												
+
+												
