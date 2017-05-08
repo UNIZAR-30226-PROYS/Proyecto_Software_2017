@@ -4,7 +4,6 @@ import modelo.datos.*;
 import controlador.datos.*;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /*
  * Clase faccade para el proyecto de cambia libros 
@@ -73,7 +72,7 @@ public class FaccadeCL{
 	 * Devuelve una lista de libros de la base de datos 
 	 * cuyos valores correspondan con el de book
 	 */
-	public ListaLibros searchBook(LibrosVO book) throws SQLException{
+	public ListaLibros searchBook(UsuariosVO user, LibrosVO book) throws SQLException{
 		return null;
 	}
 	
