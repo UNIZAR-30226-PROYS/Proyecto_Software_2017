@@ -1,4 +1,4 @@
-package controlador;
+package cambia_libros.controlador;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import modelo.FaccadeCL;
-import modelo.datos.*;
+import cambia_libros.modelo.FaccadeCL;
+import cambia_libros.modelo.datos.*;
 
 /**
  * Servlet implementation class CrearUsuarioServlet
@@ -55,6 +55,7 @@ public class AddFavBookServlet extends HttpServlet {
 		
 		
 		if (error.equals("")){
+			System.err.println("[AddFavBook]: No hay error en los parametros");
 			UsuariosVO usuario = new UsuariosVO(nick, null, null, new BigDecimal(0),
 												null, null, null, null);
 			LibrosVO libro_fav = new LibrosVO(id_book, null, null, null, null, null);
@@ -62,12 +63,14 @@ public class AddFavBookServlet extends HttpServlet {
 			try{
 				FaccadeCL fachada = new FaccadeCL ();
 				fachada.addFavBook(fav);
+				resp.sendError(100);
 			}catch (Exception e){
 				resp.sendError(500, e.getMessage());
+				System.err.print("[AddFavBook]: ");
 				e.printStackTrace(System.err);
 			}
-			resp.sendError(100);
 		}else{
+			System.err.println("[AddFavBook]: Errores encontrados:\n" + error);
 			resp.sendError(400, "Errores encontrados:\n" + error);
 		}
 		

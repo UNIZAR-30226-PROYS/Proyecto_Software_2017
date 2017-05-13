@@ -1,4 +1,4 @@
-package controlador;
+package cambia_libros.controlador;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import modelo.FaccadeCL;
-import modelo.datos.*;
+import cambia_libros.modelo.FaccadeCL;
+import cambia_libros.modelo.datos.*;
 
 /**
  * Servlet implementation class CrearUsuarioServlet
@@ -87,6 +87,7 @@ public class ModifyUserServlet extends HttpServlet {
 		
 		
 		if (error.equals("")){
+			System.err.println("[ModifyUser]: No hay error en parametros");
 			UsuariosVO usuario = new UsuariosVO(nick, null, null, new BigDecimal(0),
 												password, null, null, null);
 			UsuariosVO usr_destino = new UsuariosVO(nick, nombre, apellidos,
@@ -95,12 +96,14 @@ public class ModifyUserServlet extends HttpServlet {
 			try{
 				FaccadeCL fachada = new FaccadeCL ();
 				fachada.updateUser(usuario, usr_destino);
+				resp.sendError(100);
 			}catch (Exception e){
 				resp.sendError(500, e.getMessage());
+				System.err.print("[ModifyUser]: ");
 				e.printStackTrace(System.err);
 			}
-			resp.sendError(100);
 		}else{
+			System.err.println("[ModifyUser]: Errores encontrados:\n" + error);
 			resp.sendError(400, "Errores encontrados:\n" + error);
 		}
 		

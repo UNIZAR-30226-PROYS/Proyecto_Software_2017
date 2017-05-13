@@ -1,4 +1,4 @@
-package controlador;
+package cambia_libros.controlador;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import controlador.datos.Libros;
-import modelo.FaccadeCL;
-import modelo.datos.LibrosVO;
-import modelo.datos.UsuariosVO;
+import cambia_libros.controlador.datos.Libros;
+import cambia_libros.modelo.FaccadeCL;
+import cambia_libros.modelo.datos.LibrosVO;
+import cambia_libros.modelo.datos.UsuariosVO;
 
 public class GetBookServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -53,6 +53,7 @@ public class GetBookServlet extends HttpServlet {
 		
 		
 		if (error.equals("")){
+			System.err.println("[GetBook]: No se ha encontrado error en los parametros");
 			UsuariosVO usuario = new UsuariosVO(nick, null, null, new BigDecimal(0),
 												null, null, null, null);
 			
@@ -70,9 +71,11 @@ public class GetBookServlet extends HttpServlet {
 				
 			}catch (Exception e){
 				resp.sendError(500, e.getMessage());
+				System.err.print("[GetBook]: ");
 				e.printStackTrace(System.err);
 			}
 		}else{
+			System.err.println("[GetBook]: Errores encontrados:\n" + error);
 			resp.sendError(400, "Errores encontrados:\n" + error);
 		}
 		

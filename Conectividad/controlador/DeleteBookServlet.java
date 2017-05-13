@@ -1,4 +1,4 @@
-package controlador;
+package cambia_libros.controlador;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import modelo.FaccadeCL;
-import modelo.datos.*;
+import cambia_libros.modelo.FaccadeCL;
+import cambia_libros.modelo.datos.*;
 
 /**
  * Servlet implementation class CrearUsuarioServlet
@@ -63,18 +63,21 @@ public class DeleteBookServlet extends HttpServlet {
 		
 		
 		if (error.equals("")){
+			System.err.println("[DeleteBook]: No hay error en los parametros");
 			UsuariosVO usuario = new UsuariosVO(nick, null, null, new BigDecimal(0),
 												password, null, null, null);
 			LibrosVO libro = new LibrosVO(id_book, usuario, null, null, null, null);
 			try{
 				FaccadeCL fachada = new FaccadeCL ();
-				fachada.deleteBook(libro);
+				fachada.deleteBook(usuario,libro);
+				resp.sendError(100);
 			}catch (Exception e){
 				resp.sendError(500, e.getMessage());
+				System.err.print("[DeleteBook]: ");
 				e.printStackTrace(System.err);
 			}
-			resp.sendError(100);
 		}else{
+			System.err.println("[DeleteBook]: Errores encontrados:\n" + error);
 			resp.sendError(400, "Errores encontrados:\n" + error);
 		}
 		
