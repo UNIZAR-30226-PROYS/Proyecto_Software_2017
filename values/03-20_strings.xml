@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Cambia Libros</string>
+    <string name="title_activity_chat__gps">Chat_GPS</string>
+    <string-array name="locOptions">
+        <item>"Ciudad"</item>
+        <item>"Coordenadas"</item>
+    </string-array>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_libros">Libros</string>
+    <string name="prompt_email">Usuario</string>
+    <string name="prompt_ciudad">Ciudad</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="prompt_password2">Repetir Contraseña</string>
+    <string name="action_sign_in">Iniciar Sesión</string>
+    <string name="action_sign_in_short">Iniciar Sesión</string>
+    <string name="action_register">Registrarse</string>
+    <string name="error_invalid_email">Email inválido</string>
+    <string name="error_invalid_password">Contraseña demasiado corta</string>
+    <string name="error_incorrect_password">Contraseña incorrecta</string>
+    <string name="error_field_required">El campo es requerido</string>
+    <string name="permission_rationale">Permisos de contacto requeridos</string>
+
+</resources>

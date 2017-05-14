@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3pt"
+        android:layout_marginLeft="1pt"
+        android:layout_marginRight="2pt">
+        <TextView android:id="@+id/tituloR"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textSize="10pt"
+            android:lines = "1"
+            android:ellipsize="marquee"/>
+        <TextView android:id="@+id/usuarioR"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:ellipsize="marquee"
+            android:lines = "1"/>
+    </LinearLayout>
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right">
+        <barbarahliskov.cambialibros.ButtonList android:id="@+id/botonListR"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:textSize="5pt"
+            android:text="Intercambiar"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
+    </LinearLayout>
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3pt"
+        android:layout_marginLeft="1pt"
+        android:layout_marginRight="2pt">
+        <TextView android:id="@+id/autorR"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:ellipsize="marquee"
+            android:lines = "1"/>
+        <TextView android:id="@+id/distR"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_gravity="right"
+            android:ellipsize="marquee"
+            android:lines = "1"/>
+    </LinearLayout>
+
+</LinearLayout>
+

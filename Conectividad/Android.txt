@@ -1,0 +1,10 @@
+Ejemplos de como enchufar Android a los WebService.
+
+http://www.veereshr.com/Android/AndroidToServlet
+
+http://www.javaknowledge.info/sample-login-app-in-android-using-servlet-and-json-parsing/
+
+
+Detalle de la IPv4 cuando se lanza.
+
+http://stackoverflow.com/questions/19839784/access-a-tomcat-local-server-using-android-device

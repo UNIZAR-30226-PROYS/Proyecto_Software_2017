@@ -66,7 +66,40 @@ public class AddLibro extends AppCompatActivity {
     }
 
     private void attemptRegister() {
-        
+        try {
+            // Reset errors.
+            mTitulo.setError(null);
+            mCiudad.setError(null);
+            mAutor.setError(null);
+
+
+            // Store values at the time of the login attempt.
+            String titulo = mTitulo.getText().toString();
+            String autor = mAutor.getText().toString();
+            String ciudad = mCiudad.getText().toString();
+
+            boolean cancel = false;
+            View focusView = null;
+
+            // Check for a valid password, if the user entered one.
+            if (TextUtils.isEmpty(titulo)) {
+                mTitulo.setError("Introduzca algún título.");
+                focusView = mTitulo;
+                cancel = true;
+            }
+            if (TextUtils.isEmpty(autor)) {
+                mTitulo.setError("Introduzca algún autor.");
+                focusView = mAutor;
+                cancel = true;
+            }
+            if (TextUtils.isEmpty(ciudad)) {
+                mTitulo.setError("Introduzca alguna ciudad.");
+                focusView = mCiudad;
+                cancel = true;
+            }
+        } catch (Exception e){
+
+        }
 
 
 
