@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -44,6 +47,7 @@ public class Busqueda extends AppCompatActivity {
     double xml_latitude;
     double xml_longitude;
 
+    String url_final = "";
 
     /**
      *
@@ -270,6 +274,7 @@ public class Busqueda extends AppCompatActivity {
                         bookSearch += "&location="+lat+";"+lon;
                     }
 
+                    url_final = bookSearch;
                     new SearchBookTask().execute(new String[] {bookSearch , prueba});
 
                 }
@@ -373,14 +378,12 @@ public class Busqueda extends AppCompatActivity {
 
             try {
 
-                HttpURLConnection urlConnection = null;
-                URL url = new URL(data[0]);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setReadTimeout(10000 /* milliseconds */);
-                urlConnection.setConnectTimeout(15000 /* milliseconds */);
-                urlConnection.setDoOutput(true);
-                urlConnection.connect();
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpGet request = new HttpGet();
+                URI website = new URI(url_final);
+                request.setURI(website);
+                httpClient.execute(request);
+
                         /* Recibir respuesta */
                 String result = data[1];
                         /* Supongamos que lo tenemos */
@@ -395,6 +398,8 @@ public class Busqueda extends AppCompatActivity {
                 mue.printStackTrace();
             } catch (IOException ioe) {
                 ioe.printStackTrace();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
             }
 
             return "BIEN";
