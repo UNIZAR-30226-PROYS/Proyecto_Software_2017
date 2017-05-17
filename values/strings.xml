@@ -19,5 +19,9 @@
     <string name="error_incorrect_password">Contraseña incorrecta</string>
     <string name="error_field_required">El campo es requerido</string>
     <string name="permission_rationale">Permisos de contacto requeridos</string>
+    <item type="id" name="key_1" />
+    <item type="id" name="key_2" />
+    <item type="id" name="key_3" />
+    <item type="id" name="key_4" />
 
 </resources>
