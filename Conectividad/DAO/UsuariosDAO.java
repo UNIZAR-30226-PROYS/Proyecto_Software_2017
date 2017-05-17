@@ -1,10 +1,14 @@
 package DAO;
 
-import VO.Usuarios;
+import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
+import org.hibernate.criterion.Example;
+
+import VO.Usuarios;
+
 
 public class UsuariosDAO {
 	public void addUsuario(Usuarios tra){
@@ -68,5 +72,14 @@ public class UsuariosDAO {
 	    session.close();
 
 	    return rowCount;
+	}
+	
+	public List<Usuarios> searchUsuarios(Usuarios obj){
+		Session session = SessionUtil.getSession();
+        Transaction tx = session.beginTransaction();
+        List<Usuarios> lista = session.createCriteria(Usuarios.class).add(Example.create(obj).excludeZeroes()).list();
+        tx.commit();
+        session.close();
+        return lista;
 	}
 }

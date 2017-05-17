@@ -24,5 +24,5 @@ public class SessionUtil {
 
 	        return session;
 	    }
-	}
 }
+

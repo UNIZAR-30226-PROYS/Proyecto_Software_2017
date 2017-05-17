@@ -1,8 +1,11 @@
 package DAO;
 
+import java.util.List;
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
+import org.hibernate.criterion.Example;
 
 import VO.Transacciones;
 
@@ -10,7 +13,7 @@ public class TransaccionesDAO {
 	public void addTransaccion(Transacciones tra){
 		Session session = SessionUtil.getSession();
         Transaction tx = session.beginTransaction();
-        addTransacciones(session,tra);
+        addTransaccion(session,tra);
         tx.commit();
         session.close();
 	}
@@ -59,5 +62,14 @@ public class TransaccionesDAO {
 	    tx.commit();
 	    session.close();
 	    return rowCount;
+	}
+	
+	public List<Transacciones> searchTransacciones(Transacciones obj){
+		Session session = SessionUtil.getSession();
+        Transaction tx = session.beginTransaction();
+        List<Transacciones> lista = session.createCriteria(Transacciones.class).add(Example.create(obj).excludeZeroes()).list();
+        tx.commit();
+        session.close();
+        return lista;
 	}
 }

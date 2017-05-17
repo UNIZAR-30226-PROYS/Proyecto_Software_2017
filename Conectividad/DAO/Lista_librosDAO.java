@@ -1,9 +1,12 @@
 package DAO;
 
 
+import java.util.List;
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
+import org.hibernate.criterion.Example;
 
 import VO.Lista_libros;
 
@@ -63,4 +66,12 @@ public class Lista_librosDAO {
         return rowCount;
 	}
 
+	public List<Lista_libros> searchLista_libros(Lista_libros obj){
+		Session session = SessionUtil.getSession();
+        Transaction tx = session.beginTransaction();
+        List<Lista_libros> lista = session.createCriteria(Lista_libros.class).add(Example.create(obj).excludeZeroes()).list();
+        tx.commit();
+        session.close();
+        return lista;
+	}
 }
