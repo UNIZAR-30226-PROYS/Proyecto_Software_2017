@@ -12,10 +12,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -82,10 +87,28 @@ public class UsuariosFavoritos extends AppCompatActivity {
                 "</gente>\n" +
                 "</busqueda>";
 
+        String prueba2 = "<busqueda nick=\"Barbara96\">\n" +
+                "<gente>\n" +
+                "<usuario>\n" +
+                "\t<nick>paco91</nick>\n" +
+                "\t<nombre>paco</nombre>\n" +
+                "\t<apellidos>Peperoni</apellidos>\n" +
+                "\t<valoracion>4.4</valoracion>\n" +
+                "\t<favorito>True</favorito>\n" +
+                "</usuario>\n" +
+                "</gente>\n" +
+                "</busqueda>";
 
                 /* FIN DE PRUEBAS */
 
-        new UsuariosFavoritos.SearchFavsUsersTask().execute(prueba);
+        Bundle b = getIntent().getExtras();
+        if (b == null) {
+            new UsuariosFavoritos.SearchFavsUsersTask().execute(prueba);
+        }else{
+            new UsuariosFavoritos.SearchFavsUsersTask().execute(prueba2);
+
+        }
+        //new UsuariosFavoritos.SearchFavsUsersTask().execute(prueba);
     }
 
 
@@ -135,13 +158,34 @@ public class UsuariosFavoritos extends AppCompatActivity {
                     button.setBackgroundResource(R.drawable.ic_slide_switch_off);
                     //this.getView((int) v.getTag(), v);
 
-                    Toast.makeText(getApplicationContext(), "Favorito borrado" + v.getTag(),
-                            Toast.LENGTH_SHORT).show();
+
+
+                    String user = (String) v.getTag(R.id.key_1);
+                    Toast.makeText(this.getContext(), user + " eliminado de favoritos", Toast.LENGTH_SHORT).show();
+
                     button.setActivated(true);
 
                     // Eliminar de favoritos
 
+
+                    new UsuariosFavoritos.DeleteFavUserTask().execute(user);
+
+
+
                     // Volver a cargar favoritos
+                    //new UsuariosFavoritos.SearchFavsUsersTask().execute(prueba);
+
+                    Intent intent = new Intent(UsuariosFavoritos.this, UsuariosFavoritos.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable("n", 1);
+                    intent.putExtras(b);
+                    startActivity(intent);
+                    finish();
+
+                   /* startActivity(new Intent(UsuariosFavoritos.this, UsuariosFavoritos.class));
+                    finish();*/
+
+
                 }
             };
             c.setIds(R.layout.rows_usuarios_favoritos, R.id.ciudadF, R.id.nombreF, R.id.usuarioF, R.id.distF, R.id.botonFav);
@@ -174,11 +218,59 @@ public class UsuariosFavoritos extends AppCompatActivity {
                 ArrayList<String> parametros = XML_Parser.parseaResultadoFavsUsers(result);
 
                 fillData(parametros);
+
             } catch (MalformedURLException mue) {
                 mue.printStackTrace();
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+            return "BIEN";
+
+        }
+        /*
+        protected void onPostExecute(String page) {
+            //textView.setText(page);
+            Toast toast = Toast.makeText(getApplicationContext(), page, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        */
+    }
+
+    private class DeleteFavUserTask extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... data) {
+
+            // EN principio, el parametro llevara los datos
+            String text = "";
+            BufferedReader reader = null;
+
+            try {
+
+                String miNombre = "Laura";
+                String user = data[0];
+                String url = "http://10.0.2.2:8080/CambiaLibros/DeleteFavUserServlet";
+
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpPost request = new HttpPost(url);
+                List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+
+                postParameters.add(new BasicNameValuePair("nick", miNombre));
+                postParameters.add(new BasicNameValuePair("fav_nick", user));
+
+
+
+                UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
+                        postParameters);
+
+                request.setEntity(formEntity);
+                httpClient.execute(request);
+
+                // Defined URL  where to send data
+
+            } catch(Exception e) {
+                // Do something about exceptions
                 e.printStackTrace();
             }
 

@@ -25,6 +25,8 @@ public class CustomArrayAdapter extends ArrayAdapter<Row> implements
         private int idDist;
         private int idBoton;
 
+        static public final int ID_1 = 1;
+
         public CustomArrayAdapter(Context context, List < Row > objects) {
             super(context, 0, objects);
             layoutInflater = LayoutInflater.from(context);
@@ -65,7 +67,15 @@ public class CustomArrayAdapter extends ArrayAdapter<Row> implements
         holder.getTextViewAutor().setText(row.getAutor());
         holder.getTextViewUsuario().setText(row.getUsuario());
         holder.getTextViewDist().setText(Long.toString(row.getDist()) + " km");
-        holder.getButton().setTag(position);
+       // holder.getButton().setTag(position);
+
+        //Para borrar un usuario favorito se necesita el nick del usuario
+        holder.getButton().setTag(R.id.key_1, row.getTitulo());
+        //Para borrar un libro favorito se necesita el id del libro
+
+        //Para devolver o intercambiar se necesita el nick del usuario y el titulo del libro
+        // para abrir el chat y generar un mensaje automatico
+        holder.getButton().setTag(R.id.key_2, row.getUsuario());
         //holder.getCheckBox().setChecked(row.isChecked());
         holder.getButton().setOnClickListener(this);
 
@@ -75,12 +85,11 @@ public class CustomArrayAdapter extends ArrayAdapter<Row> implements
     public void onClick(View v) {
 
         Button button = (Button) v;
-        int position = (Integer) v.getTag();
-        /*getItem(position).setChecked(checkBox.isChecked());
+        //int position = (Integer) v.getTag();
+        /*getItem(position).setChecked(checkBox.isChecked());*/
 
-        String msg = this.getContext().getString(R.string.check_toast,
-                position, checkBox.isChecked());*/
-        Toast.makeText(this.getContext(), "Fila " + position, Toast.LENGTH_SHORT).show();
+        String msg = (String) v.getTag(R.id.key_1);
+        Toast.makeText(this.getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
     static class Holder
