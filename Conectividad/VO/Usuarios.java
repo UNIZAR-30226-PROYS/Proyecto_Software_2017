@@ -7,6 +7,11 @@ import javax.persistence.*;
 @Entity(name = "Usuarios")
 @Table(name = "Usuarios")
 public class Usuarios implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7695133847485595607L;
+
 	@Id
 	@Column(name = "nickname",nullable=false)
 	private String nickname;
