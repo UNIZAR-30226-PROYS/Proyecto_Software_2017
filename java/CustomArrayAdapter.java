@@ -24,6 +24,7 @@ public class CustomArrayAdapter extends ArrayAdapter<Row> implements
         private int idUsuario;
         private int idDist;
         private int idBoton;
+        private int id;
 
         static public final int ID_1 = 1;
 
@@ -32,14 +33,14 @@ public class CustomArrayAdapter extends ArrayAdapter<Row> implements
             layoutInflater = LayoutInflater.from(context);
         }
 
-        public void setIds (int layout, int a, int t, int u, int d, int b){
-            this.layout = layout;
-            this.idAutor = a;
-            this.idTitulo = t;
-            this.idUsuario = u;
-            this.idDist = d;
-            this.idBoton = b;
-        }
+    public void setIds (int layout, int a, int t, int u, int d, int b){
+        this.layout = layout;
+        this.idAutor = a;
+        this.idTitulo = t;
+        this.idUsuario = u;
+        this.idDist = d;
+        this.idBoton = b;
+    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
@@ -72,10 +73,10 @@ public class CustomArrayAdapter extends ArrayAdapter<Row> implements
         //Para borrar un usuario favorito se necesita el nick del usuario
         holder.getButton().setTag(R.id.key_1, row.getTitulo());
         //Para borrar un libro favorito se necesita el id del libro
-
+        holder.getButton().setTag(R.id.key_2, row.getId());
         //Para devolver o intercambiar se necesita el nick del usuario y el titulo del libro
         // para abrir el chat y generar un mensaje automatico
-        holder.getButton().setTag(R.id.key_2, row.getUsuario());
+        holder.getButton().setTag(R.id.key_3, row.getUsuario());
         //holder.getCheckBox().setChecked(row.isChecked());
         holder.getButton().setOnClickListener(this);
 
