@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -22,9 +24,12 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -210,11 +215,14 @@ public class UsuariosFavoritos extends AppCompatActivity {
                 HttpGet request = new HttpGet();
                 URI website = new URI(url);
                 request.setURI(website);
-                httpClient.execute(request);
+
+                HttpResponse response = httpClient.execute(request);
 
                         /* Recibir respuesta */
-                String result = data[0];
+
                         /* Supongamos que lo tenemos */
+                String result = data[0];
+
                 ArrayList<String> parametros = XML_Parser.parseaResultadoFavsUsers(result);
 
                 fillData(parametros);
