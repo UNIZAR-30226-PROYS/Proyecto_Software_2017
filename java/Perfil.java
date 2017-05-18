@@ -90,7 +90,7 @@ public class Perfil extends AppCompatActivity {
                 "\t<favorito>13431</favorito>\n" +
                 "usuario\n" +
                 "</busqueda>";
-        new Perfil.SearchUserTask().execute(new String[]{"cargar", prueba});
+        new SearchUserTask().execute(new String[]{"cargar", prueba});
 
 
     }
@@ -145,10 +145,6 @@ public class Perfil extends AppCompatActivity {
             mUsuario.setError(getString(R.string.error_field_required));
             focusView = mUsuario;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mUsuario.setError(getString(R.string.error_invalid_email));
-            focusView = mUsuario;
-            cancel = true;
         }
 
 
@@ -175,11 +171,6 @@ public class Perfil extends AppCompatActivity {
             i.putExtra("Usuario", user);
             startActivity(i);
         }
-    }
-
-    private boolean isEmailValid(String email) {
-
-        return email.matches("[A-Z,a-z]+@[A-Z,a-z]+[.][A-Z,a-z]+");
     }
 
     void eliminarUsuario() {
