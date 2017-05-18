@@ -13,15 +13,20 @@ import android.widget.RadioButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jorge on 24/03/2017.
@@ -167,6 +172,7 @@ public class Perfil extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
+            new SearchUserTask().execute(new String[]{"guardar", null});
             Intent i = new Intent(Perfil.this, Menu.class);
             i.putExtra("Usuario", user);
             startActivity(i);
@@ -201,14 +207,32 @@ public class Perfil extends AppCompatActivity {
                         /* Supongamos que lo tenemos */
                         ArrayList<String> parametros = XML_Parser.parseaResultadoUser(result);
                         fillData(parametros);
-                    } catch (MalformedURLException mue) {
-                        mue.printStackTrace();
-                    } catch (IOException ioe) {
-                        ioe.printStackTrace();
-                    } catch (URISyntaxException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     break;
+
+                case "guardar":
+                    try {
+                        String url = "http://10.0.2.2:8080/CambiaLibros/ModifyUserServlet";
+                        HttpClient httpClient = new DefaultHttpClient();
+                        HttpPost request = new HttpPost(url);
+                        List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+
+                        postParameters.add(new BasicNameValuePair("nick", "LegenDanny"));
+                        postParameters.add(new BasicNameValuePair("nombre", "Nombre"));
+                        postParameters.add(new BasicNameValuePair("apellidos", "Apellidos"));
+                        postParameters.add(new BasicNameValuePair("new_password", "12345"));
+                        postParameters.add(new BasicNameValuePair("password", "12334"));
+
+                        UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
+                                postParameters);
+
+                        request.setEntity(formEntity);
+                        httpClient.execute(request);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
             }
 
             return "BIEN";
@@ -227,6 +251,6 @@ public class Perfil extends AppCompatActivity {
         mNombre.setText(parametros.get(1));
         mApellidos.setText(parametros.get(2));
         valmed.setRating(Float.parseFloat(parametros.get(3)));
-        valnum.setText(parametros.get(3)+"/5");
+        valnum.setText(parametros.get(3) + "/5");
     }
 }
