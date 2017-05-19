@@ -15,8 +15,10 @@ public class XML_Parser {
         XML = XML.replace("\n", "");
         /* Parseamos la cabecera de la búsqueda */
         ArrayList<String> parametros = new ArrayList<String>();
-        /* Quitamos la parte de <busqueda nick="Barbara96"> */
+        /* Quitamos la cabecera */
         String parseado = XML.substring(XML.indexOf(">") + 1);
+        /* Quitamos la parte de <busqueda nick="Barbara96"> */
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
         /* Quitamos la parte de <libreria> */
         parseado = parseado.substring(parseado.indexOf(">") + 1);
         while (parseado.substring(0, 7).equals("<libro>")) {
@@ -60,8 +62,10 @@ public class XML_Parser {
         XML = XML.replace("\n", "");
         /* Parseamos la cabecera de la búsqueda */
         ArrayList<String> parametros = new ArrayList<String>();
-        /* Quitamos la parte de <busqueda nick="Barbara96"> */
+        /* Quitamos la cabecera */
         String parseado = XML.substring(XML.indexOf(">") + 1);
+        /* Quitamos la parte de <busqueda nick="Barbara96"> */
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
         /* Quitamos la parte de <gente> */
         parseado = parseado.substring(parseado.indexOf(">") + 1);
         while (parseado.substring(0, 9).equals("<usuario>")) {
@@ -100,8 +104,10 @@ public class XML_Parser {
         XML = XML.replace("\n", "");
         /* Parseamos la cabecera de la búsqueda */
         ArrayList<String> parametros = new ArrayList<String>();
-        /* Quitamos la parte de <busqueda nick="Barbara96"> */
+        /* Quitamos la cabecera */
         String parseado = XML.substring(XML.indexOf(">") + 1);
+        /* Quitamos la parte de <busqueda nick="Barbara96"> */
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
         /* Quitamos la parte de <usuario> */
         parseado = parseado.substring(parseado.indexOf(">") + 1);
         /* Quitamos el <nick> */
@@ -128,4 +134,41 @@ public class XML_Parser {
     }
 
 
+    public static ArrayList<String> parseaResultadoHistorial(String XML) {
+        /* Quitamos los saltos de linea */
+        XML = XML.replace("\n", "");
+        XML = XML.replace("\r", "");
+        XML = XML.replace("\t", "");
+        /* Parseamos la cabecera de la búsqueda */
+        ArrayList<String> parametros = new ArrayList<String>();
+        /* Quitamos la cabecera */
+        String parseado = XML.substring(XML.indexOf(">") + 1);
+        /* Quitamos la parte de <busqueda nick="Barbara96"> */
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+
+        while (parseado.length()>13 && parseado.substring(0, 13).equals("<transaccion>")) {
+            /* Quitamos el <libro> */
+            parseado = parseado.substring(13);
+            /* Quitamos el <id_libro> */
+            parseado = parseado.substring(parseado.indexOf(">") + 1);
+            parametros.add(parseado.substring(0, parseado.indexOf("<")));
+            parseado = parseado.substring(parseado.indexOf(">") + 1);
+            /* Quitamos el <titulo> */
+            parseado = parseado.substring(parseado.indexOf(">") + 1);
+            parametros.add(parseado.substring(0, parseado.indexOf("<")));
+            parseado = parseado.substring(parseado.indexOf(">") + 1);
+            /* Quitamos el <autor> */
+            parseado = parseado.substring(parseado.indexOf(">") + 1);
+            parametros.add(parseado.substring(0, parseado.indexOf("<")));
+            parseado = parseado.substring(parseado.indexOf(">") + 1);
+            /* Quitamos el <usuario> */
+            parseado = parseado.substring(parseado.indexOf(">") + 1);
+            parametros.add(parseado.substring(0, parseado.indexOf("<")));
+            parseado = parseado.substring(parseado.indexOf(">") + 1);
+            /* Quitamos el </libro> */
+            parseado = parseado.substring(parseado.indexOf(">") + 1);
+        }
+
+        return parametros;
+    }
 }
