@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -34,7 +36,7 @@ public class DeleteLibro extends AppCompatActivity {
     private ListView mList;
     List<Row> rows = new ArrayList<Row>(30);
     Row row = null;
-    String url_final = "http://10.0.2.2:8080/CambiaLibros/SearchBookServlet?nick=LegenDanny&nick_b=LegenDanny";
+    String url_final = "http://10.0.2.2:8080/CambiaLibros/SearchBookServlet?nick=Laura&nick_b=Laura";
 
     /**
      * Called when the activity is first created.
@@ -90,7 +92,7 @@ public class DeleteLibro extends AppCompatActivity {
         mList = (ListView) findViewById(R.id.list);
 
 
-        new DeleteLibro.SearchBookTask().execute(new String[]{"", prueba});
+        new SearchBookTask().execute(new String[]{"", prueba});
 
 
 
@@ -102,8 +104,10 @@ public class DeleteLibro extends AppCompatActivity {
                 // ListView Clicked item index
                 long itemPosition = id;
 
+
+
                 try {
-                    //new DeleteBookTask().execute(new String[] {"" , prueba});
+                    new DeleteBookTask().execute(String.valueOf(rows.get( (int) itemPosition).getId()));
                     //new SearchBookTask().execute(new String[]{"", prueba});
                 } catch(Exception e){
 
@@ -113,8 +117,8 @@ public class DeleteLibro extends AppCompatActivity {
                 // Show Alert
                 Toast.makeText(getApplicationContext(), "Se borrara el elemento " + rows.get( (int) itemPosition).getTitulo(),
                         Toast.LENGTH_LONG).show();
-                // Intent i = new Intent(LibrosFavoritos.this, Busqueda.class);
-                // startActivity(i);
+                Intent i = new Intent(DeleteLibro.this, DeleteLibro.class);
+                startActivity(i);
             }
         });
 
@@ -126,42 +130,48 @@ public class DeleteLibro extends AppCompatActivity {
 
     private void fillData(ArrayList<String> parametros) {
 
+        if(!parametros.isEmpty()) {
 
 
+            for (int i = 0; i < parametros.size(); i = i + 6) {
+                rows.add(new Row(parametros.get(i + 1), parametros.get(i + 2), parametros.get(i + 3),
+                    /*Long.parseLong(parametros.get(i+4))*/ (long) 4, Integer.parseInt(parametros.get(i))));
+            }
 
-        for(int i = 0; i<parametros.size(); i=i+6){
-            rows.add(new Row(parametros.get(i+1),parametros.get(i+2),parametros.get(i+3), /*Long.parseLong(parametros.get(i+4))*/ (long) 4));
+
+            if (!rows.isEmpty()) {
+                TextView empty = (TextView) findViewById(R.id.empty);
+                empty.setWidth(0);
+            }
+
+            CustomArrayAdapter c = new CustomArrayAdapter(this, rows) {
+                @Override
+                public void onClick(View v) {
+                    Button button = (Button) v;
+
+                    if (button.isActivated()) {
+                        button.setBackgroundResource(R.drawable.ic_slide_switch_on);
+                        Toast.makeText(getApplicationContext(), "Guardado como favorito",
+                                Toast.LENGTH_SHORT).show();
+                        button.setActivated(false);
+                    } else {
+                        button.setBackgroundResource(R.drawable.ic_slide_switch_off);
+
+                        Toast.makeText(getApplicationContext(), "Favorito borrado",
+                                Toast.LENGTH_SHORT).show();
+                        button.setActivated(true);
+                    }
+                }
+            };
+
+            c.setIds(R.layout.activity_libros, R.id.ciudadMiLi, R.id.nombreMiLi, R.id.usuarioMiLi, R.id.distMiLi, R.id.FavMiLi);
+
+            mList.setAdapter(c);
         }
-
-
-        if (!rows.isEmpty()) {
+        else{
             TextView empty = (TextView) findViewById(R.id.empty);
             empty.setWidth(0);
         }
-
-        CustomArrayAdapter c = new CustomArrayAdapter(this, rows) {
-            @Override
-            public void onClick(View v) {
-                Button button = (Button) v;
-
-                if (button.isActivated()) {
-                    button.setBackgroundResource(R.drawable.ic_slide_switch_on);
-                    Toast.makeText(getApplicationContext(), "Guardado como favorito",
-                            Toast.LENGTH_SHORT).show();
-                    button.setActivated(false);
-                } else {
-                    button.setBackgroundResource(R.drawable.ic_slide_switch_off);
-
-                    Toast.makeText(getApplicationContext(), "Favorito borrado",
-                            Toast.LENGTH_SHORT).show();
-                    button.setActivated(true);
-                }
-            }
-        };
-
-        c.setIds(R.layout.activity_libros, R.id.ciudadMiLi, R.id.nombreMiLi, R.id.usuarioMiLi, R.id.distMiLi, R.id.FavMiLi);
-
-        mList.setAdapter(c);
 
 
     }
@@ -182,9 +192,9 @@ public class DeleteLibro extends AppCompatActivity {
                 HttpPost request = new HttpPost(url);
                 List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 
-                postParameters.add(new BasicNameValuePair("nick", "LegenDanny"));
-                postParameters.add(new BasicNameValuePair("password", "Titulo"));
-                postParameters.add(new BasicNameValuePair("id_book", "1234"));
+                postParameters.add(new BasicNameValuePair("nick", "Laura"));
+                postParameters.add(new BasicNameValuePair("password", "123"));
+                postParameters.add(new BasicNameValuePair("id_book", data[0]));
 
                 UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
                         postParameters);
@@ -227,20 +237,15 @@ public class DeleteLibro extends AppCompatActivity {
                 HttpGet request = new HttpGet();
                 URI website = new URI(url_final);
                 request.setURI(website);
-                httpClient.execute(request);
+                //httpClient.execute(request);
 
                 HttpResponse response = httpClient.execute(request);
-                response.getParams().toString();
+                HttpEntity entity = response.getEntity();
 
-
-                // Defined URL  where to send data
-
-                response.getEntity().consumeContent();
-
-                        /* Recibir respuesta */
-                String result = data[1];
-                        /* Supongamos que lo tenemos */
+                // Read the contents of an entity and return it as a String.
+                String result = EntityUtils.toString(entity);
                 ArrayList<String> parametros = XML_Parser.parseaResultadoBusqueda(result);
+
 
                 fillData(parametros);
 
