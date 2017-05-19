@@ -2,17 +2,22 @@ package barbarahliskov.cambialibros;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RadioButton;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -20,11 +25,16 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,16 +96,17 @@ public class Perfil extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        String prueba = "<busqueda nick=\"Barbara96\">\n" +
+        String prueba = "<?xml version=\"1.0\"?>\n" +
+                "<busqueda nick=\"Barbara96\">\n" +
                 "<usuario>\n" +
                 "\t<nick>Debora</nick>\n" +
                 "\t<nombre>UnTio</nombre>\n" +
                 "\t<apellidos>ConApellidos</apellidos>\n" +
-                "\t<valoracion>1</valoracion>\n" +
+                "\t<valoracion>4.01</valoracion>\n" +
                 "\t<favorito>13431</favorito>\n" +
                 "usuario\n" +
                 "</busqueda>";
-        new SearchUserTask().execute(new String[]{"cargar", prueba});
+        new Perfil.SearchUserTask().execute(new String[]{user});
 
 
     }
@@ -172,7 +183,10 @@ public class Perfil extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            new SearchUserTask().execute(new String[]{"guardar", null});
+            String data = null; // datos del usuario a cambiar
+
+            /* EN PRINCIPIO; AQUI SE CREARA UN ARRAY DE STRING PARA PASARSELO DE PARAMETRO A LA FUNCION*/
+            new UpdateUserTask().execute(new String[]{data});
             Intent i = new Intent(Perfil.this, Menu.class);
             i.putExtra("Usuario", user);
             startActivity(i);
@@ -180,71 +194,19 @@ public class Perfil extends AppCompatActivity {
     }
 
     void eliminarUsuario() {
-        //Eliminar usuario BBDD
 
-        Intent i = new Intent(Perfil.this, LoginActivity.class);
-        startActivity(i);
-    }
+        String oldPass = mOldPass.getText().toString();
+        if (TextUtils.isEmpty(oldPass)) { //Si la contraseña es incorrecta
+            mOldPass.setError(getString(R.string.error_incorrect_password));
+            View focusView = mOldPass;
+            focusView.requestFocus();
+        } else {
+            new DeleteUserTask().execute(new String[]{user});
 
-
-    private class SearchUserTask extends AsyncTask<String, Void, String> {
-        protected String doInBackground(String... data) {
-
-
-            switch (data[0]) {
-                case "cargar":
-                    try {
-                        String url = "http://10.0.2.2:8080/CambiaLibros/GetUserServlet?nick=" + user
-                                + "&nick_s=" + user;
-                        HttpClient httpClient = new DefaultHttpClient();
-                        HttpGet request = new HttpGet();
-                        URI website = new URI(url);
-                        request.setURI(website);
-                        httpClient.execute(request);
-
-                        /* Recibir respuesta */
-                        String result = data[1];
-                        /* Supongamos que lo tenemos */
-                        ArrayList<String> parametros = XML_Parser.parseaResultadoUser(result);
-                        fillData(parametros);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
-
-                case "guardar":
-                    try {
-                        String url = "http://10.0.2.2:8080/CambiaLibros/ModifyUserServlet";
-                        HttpClient httpClient = new DefaultHttpClient();
-                        HttpPost request = new HttpPost(url);
-                        List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
-
-                        postParameters.add(new BasicNameValuePair("nick", "LegenDanny"));
-                        postParameters.add(new BasicNameValuePair("nombre", "Nombre"));
-                        postParameters.add(new BasicNameValuePair("apellidos", "Apellidos"));
-                        postParameters.add(new BasicNameValuePair("new_password", "12345"));
-                        postParameters.add(new BasicNameValuePair("password", "12334"));
-
-                        UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
-                                postParameters);
-
-                        request.setEntity(formEntity);
-                        httpClient.execute(request);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-            }
-
-            return "BIEN";
-
+            Intent i = new Intent(Perfil.this, LoginActivity.class);
+            startActivity(i);
         }
-        /*
-        protected void onPostExecute(String page) {
-            //textView.setText(page);
-            Toast toast = Toast.makeText(getApplicationContext(), page, Toast.LENGTH_SHORT);
-            toast.show();
-        }
-        */
+
     }
 
     private void fillData(ArrayList<String> parametros) {
@@ -253,4 +215,85 @@ public class Perfil extends AppCompatActivity {
         valmed.setRating(Float.parseFloat(parametros.get(3)));
         valnum.setText(parametros.get(3) + "/5");
     }
+
+
+    private class SearchUserTask extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... data) {
+            try {
+                String user = data[0];
+                String url = "http://10.0.2.2:8080/CambiaLibros/GetUserServlet?nick=" + user
+                        + "&nick_s=" + user;
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpGet request = new HttpGet();
+                URI website = new URI(url);
+                request.setURI(website);
+
+                HttpResponse response = httpClient.execute(request);
+
+                HttpEntity entity = response.getEntity();
+
+                // Read the contents of an entity and return it as a String.
+                String result = EntityUtils.toString(entity);
+
+                //String result = data[0];
+
+                ArrayList<String> parametros = XML_Parser.parseaResultadoUser(result);
+
+                fillData(parametros);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return "BIEN";
+        }
+    }
+
+    private class UpdateUserTask extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... data) {
+            try {
+                String url = "http://10.0.2.2:8080/CambiaLibros/ModifyUserServlet";
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpPost request = new HttpPost(url);
+                List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+
+                postParameters.add(new BasicNameValuePair("nick", "LegenDanny"));
+                postParameters.add(new BasicNameValuePair("nombre", "Nombre"));
+                postParameters.add(new BasicNameValuePair("apellidos", "Apellidos"));
+                postParameters.add(new BasicNameValuePair("new_password", "12345"));
+                postParameters.add(new BasicNameValuePair("password", "12334"));
+
+                UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
+                        postParameters);
+                request.setEntity(formEntity);
+                httpClient.execute(request);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return "BIEN";
+        }
+    }
+
+    private class DeleteUserTask extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... data) {
+            try {
+                String user = data[0];
+                String url = "http://10.0.2.2:8080/CambiaLibros/DeleteUserServlet";
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpPost request = new HttpPost(url);
+                List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+
+                postParameters.add(new BasicNameValuePair("nick", user));
+                postParameters.add(new BasicNameValuePair("password", "12334"));
+
+                UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
+                        postParameters);
+                request.setEntity(formEntity);
+                httpClient.execute(request);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return "BIEN";
+        }
+    }
+
 }
