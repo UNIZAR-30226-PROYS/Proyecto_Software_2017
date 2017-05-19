@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -20,6 +22,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -78,7 +81,7 @@ public class LibrosFavoritos extends AppCompatActivity {
         List<Row> rows = new ArrayList<Row>(30);
         Row row = null;
 
-        if (parametros != null) {
+        if (!parametros.isEmpty()) {
 
             for (int i = 0; i < parametros.size(); i = i + 6) {
                 rows.add(new Row(parametros.get(i + 1), parametros.get(i + 2), parametros.get(i + 3),
@@ -158,6 +161,11 @@ public class LibrosFavoritos extends AppCompatActivity {
             mList.setAdapter(c);
         }
 
+        else{
+            TextView empty = (TextView) findViewById(R.id.empty);
+            empty.setWidth(0);
+        }
+
 
 
     }
@@ -177,10 +185,11 @@ public class LibrosFavoritos extends AppCompatActivity {
 
                 HttpResponse response = httpClient.execute(request);
 
-                        /* Recibir respuesta */
+                HttpEntity entity = response.getEntity();
 
-                        /* Supongamos que lo tenemos */
-                String result = data[0];
+                // Read the contents of an entity and return it as a String.
+                String result = EntityUtils.toString(entity);
+
 
                 ArrayList<String> parametros = XML_Parser.parseaResultadoBusqueda(result);
 

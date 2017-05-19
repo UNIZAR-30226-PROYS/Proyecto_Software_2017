@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -21,6 +22,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -70,56 +72,15 @@ public class UsuariosFavoritos extends AppCompatActivity {
             }
         });
 
+        new UsuariosFavoritos.SearchFavsUsersTask().execute();
 
-                /* PRUEBAS */
-
-        String prueba = "<busqueda nick=\"Barbara96\">\n" +
-                "<gente>\n" +
-                "<usuario>\n" +
-                "\t<nick>paco91</nick>\n" +
-                "\t<nombre>paco</nombre>\n" +
-                "\t<apellidos>Peperoni</apellidos>\n" +
-                "\t<valoracion>4.4</valoracion>\n" +
-                "\t<favorito>True</favorito>\n" +
-                "</usuario>\n" +
-                "<usuario>\n" +
-                "\t<nick>Debora</nick>\n" +
-                "\t<nombre>UnTio</nombre>\n" +
-                "\t<apellidos>ConApellidos</apellidos>\n" +
-                "\t<valoracion>5.0</valoracion>\n" +
-                "\t<favorito>False</favorito>\n" +
-                "</usuario>\n" +
-                "</gente>\n" +
-                "</busqueda>";
-
-        String prueba2 = "<busqueda nick=\"Barbara96\">\n" +
-                "<gente>\n" +
-                "<usuario>\n" +
-                "\t<nick>paco91</nick>\n" +
-                "\t<nombre>paco</nombre>\n" +
-                "\t<apellidos>Peperoni</apellidos>\n" +
-                "\t<valoracion>4.4</valoracion>\n" +
-                "\t<favorito>True</favorito>\n" +
-                "</usuario>\n" +
-                "</gente>\n" +
-                "</busqueda>";
-
-                /* FIN DE PRUEBAS */
-
-        Bundle b = getIntent().getExtras();
-        if (b == null) {
-            new UsuariosFavoritos.SearchFavsUsersTask().execute(prueba);
-        }else{
-            new UsuariosFavoritos.SearchFavsUsersTask().execute(prueba2);
-
-        }
         //new UsuariosFavoritos.SearchFavsUsersTask().execute(prueba);
     }
 
 
     private void fillData(ArrayList<String> parametros){
 
-        if (parametros != null) {
+        if (!parametros.isEmpty()) {
             List<Row> rows = new ArrayList<Row>();
             Row row = null;
 
@@ -164,7 +125,6 @@ public class UsuariosFavoritos extends AppCompatActivity {
                     //this.getView((int) v.getTag(), v);
 
 
-
                     String user = (String) v.getTag(R.id.key_1);
                     Toast.makeText(this.getContext(), user + " eliminado de favoritos", Toast.LENGTH_SHORT).show();
 
@@ -176,19 +136,11 @@ public class UsuariosFavoritos extends AppCompatActivity {
                     new UsuariosFavoritos.DeleteFavUserTask().execute(user);
 
 
-
                     // Volver a cargar favoritos
-                    //new UsuariosFavoritos.SearchFavsUsersTask().execute(prueba);
 
-                    Intent intent = new Intent(UsuariosFavoritos.this, UsuariosFavoritos.class);
-                    Bundle b = new Bundle();
-                    b.putSerializable("n", 1);
-                    intent.putExtras(b);
-                    startActivity(intent);
+
+                    startActivity(new Intent(UsuariosFavoritos.this, UsuariosFavoritos.class));
                     finish();
-
-                   /* startActivity(new Intent(UsuariosFavoritos.this, UsuariosFavoritos.class));
-                    finish();*/
 
 
                 }
@@ -197,6 +149,9 @@ public class UsuariosFavoritos extends AppCompatActivity {
 
             mList.setAdapter(c);
 
+        }else{
+            TextView empty = (TextView) findViewById(R.id.empty);
+            empty.setWidth(0);
         }
 
 
@@ -218,10 +173,12 @@ public class UsuariosFavoritos extends AppCompatActivity {
 
                 HttpResponse response = httpClient.execute(request);
 
-                        /* Recibir respuesta */
+                HttpEntity entity = response.getEntity();
 
-                        /* Supongamos que lo tenemos */
-                String result = data[0];
+                // Read the contents of an entity and return it as a String.
+                String result = EntityUtils.toString(entity);
+
+                //String result = data[0];
 
                 ArrayList<String> parametros = XML_Parser.parseaResultadoFavsUsers(result);
 
