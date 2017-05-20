@@ -14,133 +14,138 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <Button android:id="@+id/fav_button"
+
+        <Button
+            android:id="@+id/fav_button"
             android:layout_width="15pt"
             android:layout_height="15pt"
+            android:layout_alignParentRight="true"
             android:layout_gravity="center"
-            android:gravity="right"
-            android:background="@drawable/ic_slide_switch_on"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:layout_alignParentRight="true"/>
+            android:gravity="right" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="7pt"
+                android:layout_alignParentLeft="true"
                 android:text="Nombre de usuario:"
-                android:visibility="visible"
-                android:layout_alignParentLeft="true"/>
+                android:textSize="7pt"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
             <TextView
                 android:id="@+id/user_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:textSize="10pt"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textSize="10pt" />
         </LinearLayout>
     </RelativeLayout>
 
 
-
     <TextView
-        android:layout_marginTop="5pt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="7pt"
+        android:layout_marginTop="5pt"
         android:text="Nombre:"
+        android:textSize="7pt"
+        android:textStyle="bold"
         android:visibility="visible" />
 
     <TextView
         android:id="@+id/user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLines="1"
         android:inputType="text"
-        android:textSize="10pt"
-        android:singleLine="true" />
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textSize="10pt" />
 
     <TextView
-        android:layout_marginTop="5pt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="7pt"
+        android:layout_marginTop="5pt"
         android:text="Apellidos:"
+        android:textSize="7pt"
+        android:textStyle="bold"
         android:visibility="visible" />
 
     <TextView
         android:id="@+id/user_apellidos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLines="1"
         android:inputType="text"
-        android:textSize="10pt"
-        android:singleLine="true" />
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textSize="10pt" />
 
     <TextView
-        android:layout_marginTop="5pt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="7pt"
+        android:layout_marginTop="5pt"
         android:text="Valoración media:"
+        android:textSize="7pt"
+        android:textStyle="bold"
         android:visibility="visible" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <RatingBar
             android:id="@+id/val_media"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:rating="3.5"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentLeft="true"
+            android:isIndicator="true"
+            android:numStars="5" />
 
         <TextView
+            android:id="@+id/valoracion_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3.3/5"
-            android:textStyle="bold"
-            android:textSize="15pt"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:textSize="15pt"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
     <TextView
-        android:layout_marginTop="5pt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="7pt"
+        android:layout_marginTop="5pt"
         android:text="Valorar:"
+        android:textSize="7pt"
+        android:textStyle="bold"
         android:visibility="visible" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <RatingBar
             android:id="@+id/nueva_val"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentLeft="true"
+            android:numStars="5" />
 
         <Button
-            android:id = "@+id/valorar_button"
+            android:id="@+id/valorar_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="VALORAR"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:text="VALORAR" />
 
     </RelativeLayout>
 
@@ -152,17 +157,17 @@
             android:id="@+id/libros_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="VER LIBROS"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"/>
+            android:text="VER LIBROS" />
 
         <Button
             android:id="@+id/contactar_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CONTACTAR"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"/>
+            android:text="CONTACTAR" />
 
     </RelativeLayout>
 
