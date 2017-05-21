@@ -5,16 +5,11 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -27,14 +22,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -217,7 +205,7 @@ public class Perfil extends AppCompatActivity {
     }
 
 
-    private class SearchUserTask extends AsyncTask<String, Void, String> {
+    private class SearchUserTask extends AsyncTask<String, String, String> {
         protected String doInBackground(String... data) {
             try {
                 String user = data[0];
@@ -234,18 +222,21 @@ public class Perfil extends AppCompatActivity {
 
                 // Read the contents of an entity and return it as a String.
                 String result = EntityUtils.toString(entity);
-
-                //String result = data[0];
-
-                ArrayList<String> parametros = XML_Parser.parseaResultadoUser(result);
-
-                fillData(parametros);
+                /* para rellenar los campos no se puede hacer desde aquí, llama al metodo onProgressUpdate */
+                publishProgress(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             return "BIEN";
         }
+
+        @Override
+        protected void onProgressUpdate(String... result) {
+            ArrayList<String> a = XML_Parser.parseaResultadoUser(result[0]);
+            fillData(a);
+        }
+
     }
 
     private class UpdateUserTask extends AsyncTask<String, Void, String> {
