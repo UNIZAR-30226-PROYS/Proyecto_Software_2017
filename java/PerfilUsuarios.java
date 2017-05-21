@@ -1,5 +1,6 @@
 package barbarahliskov.cambialibros;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -63,8 +64,9 @@ public class PerfilUsuarios extends AppCompatActivity {
                 Float rating = valoracion.getRating();
                 Toast.makeText(getApplicationContext(), "Valoracion: " + rating,
                         Toast.LENGTH_SHORT).show();
-                // Calcular valoración media y guardar en la BBDD
-                // Actualizar pagina para que se muestre la nueva valoración media??
+                new PerfilUsuarios.UpdateValUserTask().execute(new String[]{usuarioBuscado, rating.toString()});
+                v.setEnabled(false);
+                valoracion.setEnabled(false);
             }
         });
 
@@ -131,7 +133,8 @@ public class PerfilUsuarios extends AppCompatActivity {
         }
     }
 
-    private class SearchUserTask extends AsyncTask<String, Void, String> {
+    private class SearchUserTask extends AsyncTask<String, String, String> {
+        @Override
         protected String doInBackground(String... data) {
             try {
                 String url = "http://10.0.2.2:8080/CambiaLibros/GetUserServlet?nick=" + data[0]
@@ -149,16 +152,20 @@ public class PerfilUsuarios extends AppCompatActivity {
                 String result = EntityUtils.toString(entity);
 
 
-                //String result = data[0];
-
-                ArrayList<String> parametros = XML_Parser.parseaResultadoUser(result);
-                fillData(parametros);
+                publishProgress(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             return "BIEN";
         }
+
+        @Override
+        protected void onProgressUpdate(String... result) {
+            ArrayList<String> a = XML_Parser.parseaResultadoUser(result[0]);
+            fillData(a);
+        }
+
     }
 
     private class DeleteFavUserTask extends AsyncTask<String, Void, String> {
@@ -207,5 +214,27 @@ public class PerfilUsuarios extends AppCompatActivity {
         }
     }
 
+    private class UpdateValUserTask extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... data) {
+            try {
+                String url = "http://10.0.2.2:8080/CambiaLibros/UpdateValoracionServlet";
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpPost request = new HttpPost(url);
+                List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+
+                postParameters.add(new BasicNameValuePair("nick", data[0]));
+                postParameters.add(new BasicNameValuePair("valoration", data[1]));
+
+                UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
+                        postParameters);
+                request.setEntity(formEntity);
+                httpClient.execute(request);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return "BIEN";
+        }
+    }
 
 }
