@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -19,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -26,6 +29,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
@@ -123,39 +127,6 @@ public class Busqueda extends AppCompatActivity {
 
 
 
-                /* PRUEBAS */
-
-                String prueba = "<busqueda nick=\"Barbara96\">\n" +
-                        "<libreria>\n" +
-                        "<libro>\n" +
-                        "\t<id_libro>4134134</id_libro>\n" +
-                        "\t<titulo> 50 sombras de gray </titulo>\n" +
-                        "\t<autor> el autor gay </autor>\n" +
-                        "\t<usuario> el user </usuario>\n" +
-                        "\t<localizacion>lo del gps</localizacion>\n" +
-                        "\t<favorito>True</favorito>\n" +
-                        "</libro>\n" +
-                        "<libro>\n" +
-                        "\t<id_libro>111</id_libro>\n" +
-                        "\t<titulo> 51 sombras de gray </titulo>\n" +
-                        "\t<autor> el autor gay </autor>\n" +
-                        "\t<usuario> el user </usuario>\n" +
-                        "\t<localizacion> la localicacion o lo del gps </localizacion>\n" +
-                        "\t<fav>False</fav>\n" +
-                        "</libro>\n" +
-                        "<libro>\n" +
-                        "\t<id_libro>541</id_libro>\n" +
-                        "\t<titulo> 52 sombras de gray </titulo>\n" +
-                        "\t<autor> el autor gay </autor>\n" +
-                        "\t<usuario> el user </usuario>\n" +
-                        "\t<localizacion> la localicacion o lo del gps </localizacion>\n" +
-                        "\t<favorito>False</favorito>\n" +
-                        "</libro>\n" +
-                        "</libreria>\n" +
-                        "</busqueda>";
-
-
-                /* FIN DE PRUEBAS */
 
 
                 /* Recupera los EditText del formulario */
@@ -214,28 +185,35 @@ public class Busqueda extends AppCompatActivity {
                     fallo = true;
                 } */
 
-                /*
-                if (titS.equals("")){
+
+                if (titS.equals("") && autS.equals("") && usrS.equals("")){
                     errorTitulo.setTextColor(Color.RED);
                     error = "Introduzca título";
                     errorTitulo.setText(error);
+                    errorAutor.setTextColor(Color.RED);
+                    error = "Introduzca autor";
+                    errorAutor.setText(error);
+                    errorUsuario.setTextColor(Color.RED);
+                    error = "Introduzca usuario";
+                    errorUsuario.setText(error);
                     fallo = true;
                 }
-
-                if (autS.equals("")){
+                /*
+                if (){
                     errorAutor.setTextColor(Color.RED);
                     error = "Introduzca autor";
                     errorAutor.setText(error);
                     fallo = true;
                 }
 
-                if (usrS.equals("")){
+                if (){
                     errorUsuario.setTextColor(Color.RED);
                     error = "Introduzca usuario";
                     errorUsuario.setText(error);
                     fallo = true;
                 }
                 */
+
 
                 if(!fallo){
 
@@ -275,7 +253,8 @@ public class Busqueda extends AppCompatActivity {
                     }
 
                     url_final = bookSearch;
-                    new SearchBookTask().execute(new String[] {bookSearch , prueba});
+                    url_final = url_final.replace(" ","%20");
+                    new SearchBookTask().execute(new String[] {});
 
                 }
             }
@@ -382,11 +361,16 @@ public class Busqueda extends AppCompatActivity {
                 HttpGet request = new HttpGet();
                 URI website = new URI(url_final);
                 request.setURI(website);
-                httpClient.execute(request);
+                HttpResponse response = httpClient.execute(request);
 
-                        /* Recibir respuesta */
-                String result = data[1];
-                        /* Supongamos que lo tenemos */
+                /* Recibir respuesta */
+
+                HttpEntity entity = response.getEntity();
+
+                // Read the contents of an entity and return it as a String.
+                String result = EntityUtils.toString(entity);
+                Log.d("Devuelto-> ", result);
+
                 ArrayList<String> parametros = XML_Parser.parseaResultadoBusqueda(result);
                 Intent intent = new Intent(Busqueda.this, Resultados.class);
                 Bundle b = new Bundle();
