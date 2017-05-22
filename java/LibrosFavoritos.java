@@ -35,6 +35,7 @@ import java.util.List;
 public class LibrosFavoritos extends AppCompatActivity {
 
     private ListView mList;
+    ArrayList<String> parametros = new ArrayList<>();
 
     /**
      * Called when the activity is first created.
@@ -50,32 +51,11 @@ public class LibrosFavoritos extends AppCompatActivity {
         closeButton.setVisibility(View.INVISIBLE);
         mList = (ListView)findViewById(R.id.list);
 
-        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                // ListView Clicked item index
-                long itemPosition     = id;
-
-                // ListView Clicked item value
-                //int  itemValue    = mList.getitem
-
-                // Show Alert
-                Toast.makeText(getApplicationContext(), "Hiciste click en el número " + itemPosition,
-                        Toast.LENGTH_LONG).show();
-                Intent i = new Intent(LibrosFavoritos.this, Busqueda.class);
-                startActivity(i);
-            }
-        });
-
-        /* PRUEBAS */
-        String prueba = "";
-        new LibrosFavoritos.SearchFavsBooksTask().execute(prueba);
+        new LibrosFavoritos.SearchFavsBooksTask().execute();
     }
 
 
-    private void fillData(ArrayList<String> parametros){
+    private void fillData(){
 
 
         List<Row> rows = new ArrayList<Row>(30);
@@ -87,17 +67,6 @@ public class LibrosFavoritos extends AppCompatActivity {
                 rows.add(new Row(parametros.get(i + 1), parametros.get(i + 2), parametros.get(i + 3),
                         /*Long.parseLong(parametros.get(i+4))*/ (long) 4, Integer.parseInt(parametros.get(i))));
             }
-
-        /*rows.add(new Row("El Código da Vinci", "Dan Brown", "",(long) 0));
-        rows.add(new Row("Ángeles y Demonios", "Dan Brown", "", (long) 1));
-        rows.add(new Row("El símbolo perdido", "Dan Brown", "", (long) 2));
-        rows.add(new Row("El último deseo", "Andrzej Sapkowski", "", (long) 4));
-        rows.add(new Row("Memorias de Idhún I", "Laura Gallego","", (long) 4));
-        rows.add(new Row("La sombra del viento", "Carlos Ruiz Zafón", "",(long) 0));
-        rows.add(new Row("El testamento maya", "Steve Alten", "", (long) 1));
-        rows.add(new Row("Inferno", "Dan Brown", "", (long) 2));
-        rows.add(new Row("La brújula dorada", "Philip Pullman", "", (long) 4));
-        rows.add(new Row("Crpúsculo", "Stephanie Meyers", "", (long) 4));*/
 
 
             if (!rows.isEmpty()) {
@@ -139,20 +108,6 @@ public class LibrosFavoritos extends AppCompatActivity {
 
                     new LibrosFavoritos.DeleteFavBookTask().execute(String.valueOf(idBook));
 
-
-
-                    // Volver a cargar favoritos
-                    //new UsuariosFavoritos.SearchFavsUsersTask().execute(prueba);
-
-                    /*Intent intent = new Intent(LibrosFavoritos.this, LibrosFavoritos.class);
-                    Bundle b = new Bundle();
-                    b.putSerializable("n", 1);
-                    intent.putExtras(b);
-                    startActivity(intent);
-                    finish();*/
-
-                   startActivity(new Intent(LibrosFavoritos.this, LibrosFavoritos.class));
-                    finish();
                 }
             };
 
@@ -191,9 +146,9 @@ public class LibrosFavoritos extends AppCompatActivity {
                 String result = EntityUtils.toString(entity);
 
 
-                ArrayList<String> parametros = XML_Parser.parseaResultadoBusqueda(result);
+                parametros = XML_Parser.parseaResultadoBusqueda(result);
 
-                fillData(parametros);
+
 
             } catch (MalformedURLException mue) {
                 mue.printStackTrace();
@@ -206,13 +161,10 @@ public class LibrosFavoritos extends AppCompatActivity {
             return "BIEN";
 
         }
-        /*
+
         protected void onPostExecute(String page) {
-            //textView.setText(page);
-            Toast toast = Toast.makeText(getApplicationContext(), page, Toast.LENGTH_SHORT);
-            toast.show();
+            fillData();
         }
-        */
     }
 
     private class DeleteFavBookTask extends AsyncTask<String, Void, String> {
@@ -253,13 +205,10 @@ public class LibrosFavoritos extends AppCompatActivity {
             return "BIEN";
 
         }
-        /*
+
         protected void onPostExecute(String page) {
-            //textView.setText(page);
-            Toast toast = Toast.makeText(getApplicationContext(), page, Toast.LENGTH_SHORT);
-            toast.show();
+            new LibrosFavoritos.SearchFavsBooksTask().execute();
         }
-        */
     }
 
 }

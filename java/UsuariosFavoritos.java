@@ -38,6 +38,7 @@ import java.util.List;
 public class UsuariosFavoritos extends AppCompatActivity {
 
     private ListView mList;
+    ArrayList<String> parametros = new ArrayList<>();
 
     /**
      * Called when the activity is first created.
@@ -78,9 +79,8 @@ public class UsuariosFavoritos extends AppCompatActivity {
     }
 
 
-    private void fillData(ArrayList<String> parametros){
+    private void fillData(){
 
-        if (!parametros.isEmpty()) {
             List<Row> rows = new ArrayList<Row>();
             Row row = null;
 
@@ -136,12 +136,6 @@ public class UsuariosFavoritos extends AppCompatActivity {
                     new UsuariosFavoritos.DeleteFavUserTask().execute(user);
 
 
-                    // Volver a cargar favoritos
-
-
-                    startActivity(new Intent(UsuariosFavoritos.this, UsuariosFavoritos.class));
-                    finish();
-
 
                 }
             };
@@ -149,10 +143,6 @@ public class UsuariosFavoritos extends AppCompatActivity {
 
             mList.setAdapter(c);
 
-        }else{
-            TextView empty = (TextView) findViewById(R.id.empty);
-            empty.setWidth(0);
-        }
 
 
 
@@ -180,9 +170,8 @@ public class UsuariosFavoritos extends AppCompatActivity {
 
                 //String result = data[0];
 
-                ArrayList<String> parametros = XML_Parser.parseaResultadoFavsUsers(result);
+                parametros = XML_Parser.parseaResultadoFavsUsers(result);
 
-                fillData(parametros);
 
             } catch (MalformedURLException mue) {
                 mue.printStackTrace();
@@ -195,13 +184,11 @@ public class UsuariosFavoritos extends AppCompatActivity {
             return "BIEN";
 
         }
-        /*
+
         protected void onPostExecute(String page) {
-            //textView.setText(page);
-            Toast toast = Toast.makeText(getApplicationContext(), page, Toast.LENGTH_SHORT);
-            toast.show();
+            fillData();
         }
-        */
+
     }
 
     private class DeleteFavUserTask extends AsyncTask<String, Void, String> {
@@ -242,13 +229,11 @@ public class UsuariosFavoritos extends AppCompatActivity {
             return "BIEN";
 
         }
-        /*
+
         protected void onPostExecute(String page) {
-            //textView.setText(page);
-            Toast toast = Toast.makeText(getApplicationContext(), page, Toast.LENGTH_SHORT);
-            toast.show();
+            new UsuariosFavoritos.SearchFavsUsersTask().execute();
         }
-        */
+
     }
 
 }

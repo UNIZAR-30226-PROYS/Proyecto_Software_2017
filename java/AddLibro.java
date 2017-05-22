@@ -64,7 +64,6 @@ public class AddLibro extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 attemptRegister();
-                //startActivity(new Intent(AddLibro.this, Libros.class));
 
 
                 String data = null;
@@ -139,12 +138,12 @@ public class AddLibro extends AppCompatActivity {
                 HttpPost request = new HttpPost(url);
                 List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 
-                postParameters.add(new BasicNameValuePair("nick", "LegenDanny"));
+                postParameters.add(new BasicNameValuePair("nick", "Laura"));
                 postParameters.add(new BasicNameValuePair("tittle", "Titulo"));
                 postParameters.add(new BasicNameValuePair("author", "Autorrrr"));
                 postParameters.add(new BasicNameValuePair("description", "Descripcion"));
                 postParameters.add(new BasicNameValuePair("location", "locloc"));
-                postParameters.add(new BasicNameValuePair("password", "12334"));
+                postParameters.add(new BasicNameValuePair("password", "12345"));
 
                 UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
                         postParameters);
@@ -163,13 +162,11 @@ public class AddLibro extends AppCompatActivity {
             return "BIEN";
 
         }
-        /*
+
         protected void onPostExecute(String page) {
-            //textView.setText(page);
-            Toast toast = Toast.makeText(getApplicationContext(), page, Toast.LENGTH_SHORT);
-            toast.show();
+
+            startActivity(new Intent(AddLibro.this, Libros.class));
         }
-        */
     }
 
 

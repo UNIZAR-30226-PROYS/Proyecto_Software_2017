@@ -34,7 +34,8 @@ import java.util.List;
 public class DeleteLibro extends AppCompatActivity {
 
     private ListView mList;
-    List<Row> rows = new ArrayList<Row>(30);
+    ArrayList<String> parametros = new ArrayList<>();
+    List<Row> rows = new ArrayList<Row>();
     Row row = null;
     String url_final = "http://10.0.2.2:8080/CambiaLibros/SearchBookServlet?nick=Laura&nick_b=Laura";
 
@@ -49,39 +50,6 @@ public class DeleteLibro extends AppCompatActivity {
         /* PRUEBAS */
 
 
-        final String prueba = "<busqueda nick=\"Barbara96\">\n" +
-                "<libreria>\n" +
-                "<libro>\n" +
-                "\t<id_libro>4134134</id_libro>\n" +
-                "\t<titulo> 50 sombras de gray </titulo>\n" +
-                "\t<autor> el autor gay </autor>\n" +
-                "\t<usuario> el user </usuario>\n" +
-                "\t<localizacion>lo del gps</localizacion>\n" +
-                "\t<favorito>True</favorito>\n" +
-                "</libro>\n" +
-                "<libro>\n" +
-                "\t<id_libro>111</id_libro>\n" +
-                "\t<titulo> 51 sombras de gray </titulo>\n" +
-                "\t<autor> el autor gay </autor>\n" +
-                "\t<usuario> el user </usuario>\n" +
-                "\t<localizacion> la localicacion o lo del gps </localizacion>\n" +
-                "\t<fav>False</fav>\n" +
-                "</libro>\n" +
-                "<libro>\n" +
-                "\t<id_libro>541</id_libro>\n" +
-                "\t<titulo> 52 sombras de gray </titulo>\n" +
-                "\t<autor> el autor gay </autor>\n" +
-                "\t<usuario> el user </usuario>\n" +
-                "\t<localizacion> la localicacion o lo del gps </localizacion>\n" +
-                "\t<favorito>False</favorito>\n" +
-                "</libro>\n" +
-                "</libreria>\n" +
-                "</busqueda>";
-
-
-                /* FIN DE PRUEBAS */
-
-
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_list);
@@ -92,7 +60,7 @@ public class DeleteLibro extends AppCompatActivity {
         mList = (ListView) findViewById(R.id.list);
 
 
-        new SearchBookTask().execute(new String[]{"", prueba});
+        new SearchBookTask().execute(new String[]{});
 
 
 
@@ -108,7 +76,7 @@ public class DeleteLibro extends AppCompatActivity {
 
                 try {
                     new DeleteBookTask().execute(String.valueOf(rows.get( (int) itemPosition).getId()));
-                    //new SearchBookTask().execute(new String[]{"", prueba});
+
                 } catch(Exception e){
 
                 }
@@ -117,8 +85,6 @@ public class DeleteLibro extends AppCompatActivity {
                 // Show Alert
                 Toast.makeText(getApplicationContext(), "Se borrara el elemento " + rows.get( (int) itemPosition).getTitulo(),
                         Toast.LENGTH_LONG).show();
-                Intent i = new Intent(DeleteLibro.this, DeleteLibro.class);
-                startActivity(i);
             }
         });
 
@@ -128,7 +94,7 @@ public class DeleteLibro extends AppCompatActivity {
     }
 
 
-    private void fillData(ArrayList<String> parametros) {
+    private void fillData() {
 
         if(!parametros.isEmpty()) {
 
@@ -144,25 +110,7 @@ public class DeleteLibro extends AppCompatActivity {
                 empty.setWidth(0);
             }
 
-            CustomArrayAdapter c = new CustomArrayAdapter(this, rows) {
-                @Override
-                public void onClick(View v) {
-                    Button button = (Button) v;
-
-                    if (button.isActivated()) {
-                        button.setBackgroundResource(R.drawable.ic_slide_switch_on);
-                        Toast.makeText(getApplicationContext(), "Guardado como favorito",
-                                Toast.LENGTH_SHORT).show();
-                        button.setActivated(false);
-                    } else {
-                        button.setBackgroundResource(R.drawable.ic_slide_switch_off);
-
-                        Toast.makeText(getApplicationContext(), "Favorito borrado",
-                                Toast.LENGTH_SHORT).show();
-                        button.setActivated(true);
-                    }
-                }
-            };
+            CustomArrayAdapter c = new CustomArrayAdapter(this, rows);
 
             c.setIds(R.layout.activity_libros, R.id.ciudadMiLi, R.id.nombreMiLi, R.id.usuarioMiLi, R.id.distMiLi, R.id.FavMiLi);
 
@@ -193,7 +141,7 @@ public class DeleteLibro extends AppCompatActivity {
                 List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 
                 postParameters.add(new BasicNameValuePair("nick", "Laura"));
-                postParameters.add(new BasicNameValuePair("password", "123"));
+                postParameters.add(new BasicNameValuePair("password", "12345"));
                 postParameters.add(new BasicNameValuePair("id_book", data[0]));
 
                 UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
@@ -218,13 +166,11 @@ public class DeleteLibro extends AppCompatActivity {
             return "BIEN";
 
         }
-        /*
+
         protected void onPostExecute(String page) {
-            //textView.setText(page);
-            Toast toast = Toast.makeText(getApplicationContext(), page, Toast.LENGTH_SHORT);
-            toast.show();
+            new SearchBookTask().execute(new String[]{});
         }
-        */
+
     }
 
 
@@ -244,10 +190,9 @@ public class DeleteLibro extends AppCompatActivity {
 
                 // Read the contents of an entity and return it as a String.
                 String result = EntityUtils.toString(entity);
-                ArrayList<String> parametros = XML_Parser.parseaResultadoBusqueda(result);
+                parametros = XML_Parser.parseaResultadoBusqueda(result);
 
 
-                fillData(parametros);
 
 
             } catch (MalformedURLException mue) {
@@ -261,13 +206,12 @@ public class DeleteLibro extends AppCompatActivity {
             return "BIEN";
 
         }
-        /*
+
         protected void onPostExecute(String page) {
-            //textView.setText(page);
-            Toast toast = Toast.makeText(getApplicationContext(), page, Toast.LENGTH_SHORT);
-            toast.show();
+
+            fillData();
         }
-        */
+
     }
 
 

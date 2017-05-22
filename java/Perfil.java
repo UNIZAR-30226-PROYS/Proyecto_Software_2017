@@ -48,7 +48,8 @@ public class Perfil extends AppCompatActivity {
         setTitle("Mi Perfil");
 
         setContentView(R.layout.activity_perfil);
-        user = getIntent().getExtras().getString("Usuario");
+        //user = getIntent().getExtras().getString("Usuario");
+        user = "Laura";
         mUsuario = (EditText) findViewById(R.id.user_email);
         mNombre = (EditText) findViewById(R.id.user_name);
         mApellidos = (EditText) findViewById(R.id.user_apellidos);

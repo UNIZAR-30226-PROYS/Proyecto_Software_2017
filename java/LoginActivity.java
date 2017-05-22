@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +33,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +65,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private String email;
+    private String password;
+    ArrayList<String> parametros = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +78,16 @@ public class LoginActivity extends AppCompatActivity {
         setTitle("Inicie sesión en Cambia Libros");
 
         mPasswordView = (EditText) findViewById(R.id.password);
+
+
+
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    email = mEmailView.getText().toString();
+                    password = mPasswordView.getText().toString();
+                    new LoginActivity.VerifyUserTask().execute(new String[] {email, password});
                     return true;
                 }
                 return false;
@@ -74,7 +98,9 @@ public class LoginActivity extends AppCompatActivity {
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                email = mEmailView.getText().toString();
+                password = mPasswordView.getText().toString();
+                new LoginActivity.VerifyUserTask().execute(new String[] {email, password});
             }
         });
 
@@ -100,15 +126,12 @@ public class LoginActivity extends AppCompatActivity {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
+        Log.d("sale2", String.valueOf(parametros.size()));
 
 
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
-
-        // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -127,6 +150,13 @@ public class LoginActivity extends AppCompatActivity {
             cancel = true;
         }
 
+        /*
+        if(parametros.isEmpty()){
+            mEmailView.setError(getString(R.string.error_invalid_user));
+            focusView = mEmailView;
+            cancel = true;
+        }*/
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -140,7 +170,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -181,6 +210,56 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    private class VerifyUserTask extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... data) {
+
+            try {
+
+                String url = "http://10.0.2.2:8080/CambiaLibros/ModifyUserServlet";
+
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpPost request = new HttpPost(url);
+                List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+                Log.d(" nick-> ", data[0]);
+
+
+
+                postParameters.add(new BasicNameValuePair("nick", data[0]));
+                postParameters.add(new BasicNameValuePair("password", data[1]));
+
+                UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
+                        postParameters);
+
+                request.setEntity(formEntity);
+                HttpResponse response = httpClient.execute(request);
+
+                // Recibir respuesta
+
+                HttpEntity entity = response.getEntity();
+
+                // Read the contents of an entity and return it as a String.
+                String result = EntityUtils.toString(entity);
+                Log.d(" Devuelto-> ", result);
+
+                //parametros = XML_Parser.parseaResultadoHistorial(result);
+
+
+
+            } catch (MalformedURLException mue) {
+                mue.printStackTrace();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+
+            return null;
+
+        }
+
+        protected void onPostExecute(String page) {
+            attemptLogin();
+        }
+
+    }
 
 
 }
