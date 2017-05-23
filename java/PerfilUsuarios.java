@@ -48,8 +48,11 @@ public class PerfilUsuarios extends AppCompatActivity {
 
         valmed = (RatingBar) findViewById(R.id.val_media);
         valnum = (TextView) findViewById(R.id.valoracion_num);
-        usuario = "Jorge"; //tendría que recibirlo de la actividad anterior
-        usuarioBuscado = "Dani"; // tendría que recibir el usuario de la actividad anterior
+        usuario = "Laura"; //tendría que recibirlo de la actividad anterior
+        usuarioBuscado = getIntent().getExtras().getString("PerfilUser");
+        //usuarioBuscado = "user1"; // tendría que recibir el usuario de la actividad anterior
+        Log.d("usuario--------->", usuarioBuscado);
+
         final RatingBar valoracion = (RatingBar) findViewById(R.id.nueva_val);
         Button v = (Button) findViewById(R.id.valorar_button);
 

@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
     private View mLoginFormView;
     private String email;
     private String password;
-    ArrayList<String> parametros = new ArrayList<String>();
+    boolean ok;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +126,6 @@ public class LoginActivity extends AppCompatActivity {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        Log.d("sale2", String.valueOf(parametros.size()));
 
 
         // Reset errors.
@@ -150,12 +149,12 @@ public class LoginActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        /*
-        if(parametros.isEmpty()){
+
+        if(!ok){
             mEmailView.setError(getString(R.string.error_invalid_user));
             focusView = mEmailView;
             cancel = true;
-        }*/
+        }
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -215,7 +214,7 @@ public class LoginActivity extends AppCompatActivity {
 
             try {
 
-                String url = "http://10.0.2.2:8080/CambiaLibros/ModifyUserServlet";
+                String url = "http://10.0.2.2:8080/CambiaLibros/LogInServlet";
 
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost request = new HttpPost(url);
@@ -241,7 +240,7 @@ public class LoginActivity extends AppCompatActivity {
                 String result = EntityUtils.toString(entity);
                 Log.d(" Devuelto-> ", result);
 
-                //parametros = XML_Parser.parseaResultadoHistorial(result);
+                ok = XML_Parser.parseaLogin(result);
 
 
 

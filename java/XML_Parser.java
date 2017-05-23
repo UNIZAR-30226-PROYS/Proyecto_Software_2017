@@ -171,4 +171,24 @@ public class XML_Parser {
 
         return parametros;
     }
+
+    public static boolean parseaLogin(String XML) {
+        /* Quitamos los saltos de linea */
+        XML = XML.replace("\n", "");
+        XML = XML.replace("\r", "");
+        XML = XML.replace("\t", "");
+        /* Parseamos la cabecera de la búsqueda */
+        ArrayList<String> parametros = new ArrayList<String>();
+        /* Quitamos la cabecera */
+        String parseado = XML.substring(XML.indexOf(">") + 1);
+        /* Quitamos la parte de <login nick="Barbara96"> */
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+
+        if(parseado.substring(0,2).equals("ok")){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }

@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,8 +55,8 @@ public class Perfil extends AppCompatActivity {
         mNombre = (EditText) findViewById(R.id.user_name);
         mApellidos = (EditText) findViewById(R.id.user_apellidos);
         mOldPass = (EditText) findViewById(R.id.oldPass);
-        mNewPass = (EditText) findViewById(R.id.oldPass);
-        mReNewPass = (EditText) findViewById(R.id.oldPass);
+        mNewPass = (EditText) findViewById(R.id.newPass);
+        mReNewPass = (EditText) findViewById(R.id.reNewPass);
         valnum = (TextView) findViewById(R.id.valoracion_num);
         mUsuario.setText(user);
 
@@ -85,16 +86,7 @@ public class Perfil extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        String prueba = "<?xml version=\"1.0\"?>\n" +
-                "<busqueda nick=\"Barbara96\">\n" +
-                "<usuario>\n" +
-                "\t<nick>Debora</nick>\n" +
-                "\t<nombre>UnTio</nombre>\n" +
-                "\t<apellidos>ConApellidos</apellidos>\n" +
-                "\t<valoracion>4.01</valoracion>\n" +
-                "\t<favorito>13431</favorito>\n" +
-                "usuario\n" +
-                "</busqueda>";
+
         new Perfil.SearchUserTask().execute(new String[]{user});
 
 
@@ -102,7 +94,7 @@ public class Perfil extends AppCompatActivity {
 
     void comprobar() {
         // Reset errors.
-        mUsuario.setError(null);
+        mUsuario.setEnabled(false);
         mNombre.setError(null);
         mApellidos.setError(null);
         mOldPass.setError(null);
@@ -127,6 +119,7 @@ public class Perfil extends AppCompatActivity {
                 /***********************************************************
                  * Si el campo de la contraseña esta vacío o no coincide con la contreseña del usuario
                  */
+                /** Comparar con la contraseña pasada por bundle ***/
                 mOldPass.setError(getString(R.string.error_incorrect_password));
                 focusView = mOldPass;
                 cancel = true;
@@ -170,15 +163,7 @@ public class Perfil extends AppCompatActivity {
             // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            String data = null; // datos del usuario a cambiar
-
-            /* EN PRINCIPIO; AQUI SE CREARA UN ARRAY DE STRING PARA PASARSELO DE PARAMETRO A LA FUNCION*/
-            new UpdateUserTask().execute(new String[]{data});
-            Intent i = new Intent(Perfil.this, Menu.class);
-            i.putExtra("Usuario", user);
-            startActivity(i);
+            new UpdateUserTask().execute(new String[]{user, nombre, apellidos, oldPass, newPass});
         }
     }
 
@@ -189,11 +174,15 @@ public class Perfil extends AppCompatActivity {
             mOldPass.setError(getString(R.string.error_incorrect_password));
             View focusView = mOldPass;
             focusView.requestFocus();
-        } else {
+        }
+        /* Comprobar que sea la misma que la pasada por bundle
+        else if(){
+
+        }*/
+        else {
             new DeleteUserTask().execute(new String[]{user});
 
-            Intent i = new Intent(Perfil.this, LoginActivity.class);
-            startActivity(i);
+
         }
 
     }
@@ -248,11 +237,16 @@ public class Perfil extends AppCompatActivity {
                 HttpPost request = new HttpPost(url);
                 List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 
-                postParameters.add(new BasicNameValuePair("nick", "LegenDanny"));
-                postParameters.add(new BasicNameValuePair("nombre", "Nombre"));
-                postParameters.add(new BasicNameValuePair("apellidos", "Apellidos"));
-                postParameters.add(new BasicNameValuePair("new_password", "12345"));
-                postParameters.add(new BasicNameValuePair("password", "12334"));
+                postParameters.add(new BasicNameValuePair("nick", data[0]));
+                postParameters.add(new BasicNameValuePair("nombre", data[1]));
+                postParameters.add(new BasicNameValuePair("apellidos", data[2]));
+                /********************Hay que pasar la contraseña por bundle**********************/
+                postParameters.add(new BasicNameValuePair("password", "12345"));
+
+                if(!TextUtils.isEmpty(data[3])){
+                    postParameters.add(new BasicNameValuePair("new_password", data[4]));
+                }
+
 
                 UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
                         postParameters);
@@ -263,7 +257,14 @@ public class Perfil extends AppCompatActivity {
             }
             return "BIEN";
         }
+
+        protected void onPostExecute(String page) {
+            Intent i = new Intent(Perfil.this, Menu.class);
+            i.putExtra("Usuario", user);
+            startActivity(i);
+        }
     }
+
 
     private class DeleteUserTask extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... data) {
@@ -275,7 +276,9 @@ public class Perfil extends AppCompatActivity {
                 List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 
                 postParameters.add(new BasicNameValuePair("nick", user));
-                postParameters.add(new BasicNameValuePair("password", "12334"));
+
+                /********************Hay que pasar la contraseña por bundle**********************/
+                postParameters.add(new BasicNameValuePair("password", "12345"));
 
                 UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
                         postParameters);
@@ -285,6 +288,11 @@ public class Perfil extends AppCompatActivity {
                 e.printStackTrace();
             }
             return "BIEN";
+        }
+
+        protected void onPostExecute(String page) {
+            Intent i = new Intent(Perfil.this, LoginActivity.class);
+            startActivity(i);
         }
     }
 

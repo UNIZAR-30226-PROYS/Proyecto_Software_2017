@@ -59,16 +59,10 @@ public class UsuariosFavoritos extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                // ListView Clicked item index
-                long itemPosition     = id;
 
-                // ListView Clicked item value
-                //int  itemValue    = mList.getitem
-
-                // Show Alert
-                Toast.makeText(getApplicationContext(), "Hiciste click en el número " + itemPosition,
-                        Toast.LENGTH_LONG).show();
                 Intent i = new Intent(UsuariosFavoritos.this, PerfilUsuarios.class);
+                // Enviar el nombre del usuario
+                i.putExtra("PerfilUser", "user1");
                 startActivity(i);
             }
         });
@@ -107,22 +101,7 @@ public class UsuariosFavoritos extends AppCompatActivity {
                 public void onClick(View v) {
                     Button button = (Button) v;
 
-                    /*if (button.isActivated()) {
-                        button.setBackgroundResource(R.drawable.ic_slide_switch_on);
-                        Toast.makeText(getApplicationContext(), "Guardado como favorito",
-                                Toast.LENGTH_SHORT).show();
-                        button.setActivated(false);
-                    } else {
-                        button.setBackgroundResource(R.drawable.ic_slide_switch_off);
-
-                        Toast.makeText(getApplicationContext(), "Favorito borrado",
-                                Toast.LENGTH_SHORT).show();
-                        button.setActivated(true);
-                    }*/
-
-
                     button.setBackgroundResource(R.drawable.ic_slide_switch_off);
-                    //this.getView((int) v.getTag(), v);
 
 
                     String user = (String) v.getTag(R.id.key_1);
@@ -131,12 +110,7 @@ public class UsuariosFavoritos extends AppCompatActivity {
                     button.setActivated(true);
 
                     // Eliminar de favoritos
-
-
                     new UsuariosFavoritos.DeleteFavUserTask().execute(user);
-
-
-
                 }
             };
             c.setIds(R.layout.rows_usuarios_favoritos, R.id.ciudadF, R.id.nombreF, R.id.usuarioF, R.id.distF, R.id.botonFav);

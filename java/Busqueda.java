@@ -217,7 +217,7 @@ public class Busqueda extends AppCompatActivity {
 
                 if(!fallo){
 
-                    String miNombre="LegenDanny";
+                    String miNombre="Laura";
                     String bookSearch = "http://10.0.2.2:8080/CambiaLibros/SearchBookServlet?nick=" + miNombre;
                     if (!titS.equals("")){
                         bookSearch += "&tittle="+titS;
@@ -228,7 +228,7 @@ public class Busqueda extends AppCompatActivity {
                     }
 
                     if (!usrS.equals("")){
-                        bookSearch += "&nick_b="+titS;
+                        bookSearch += "&nick_b="+usrS;
                     }
 
                     if (citB.isChecked()){
@@ -369,6 +369,7 @@ public class Busqueda extends AppCompatActivity {
 
                 // Read the contents of an entity and return it as a String.
                 String result = EntityUtils.toString(entity);
+                Log.d("url", url_final);
                 Log.d("Devuelto-> ", result);
 
                 ArrayList<String> parametros = XML_Parser.parseaResultadoBusqueda(result);

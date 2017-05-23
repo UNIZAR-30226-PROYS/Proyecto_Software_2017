@@ -50,6 +50,8 @@ public class Resultados extends AppCompatActivity {
                 //closeButton.setText(Long.toString(itemPosition));
             }
         });
+
+        fillData();
     }
 
 
@@ -76,7 +78,19 @@ public class Resultados extends AppCompatActivity {
                 empty.setWidth(0);
             }
 
-            CustomArrayAdapter c = new CustomArrayAdapter(this, rows);
+            CustomArrayAdapter c = new CustomArrayAdapter(this, rows) {
+                @Override
+                public void onClick(View v) {
+
+                    String user = (String) v.getTag(R.id.key_3);
+                    Toast.makeText(this.getContext(), user + " eliminado de favoritos", Toast.LENGTH_SHORT).show();
+
+                    Intent i = new Intent(Resultados.this, PerfilUsuarios.class);
+                    // Enviar el nombre del usuario
+                    i.putExtra("PerfilUser", user);
+                    startActivity(i);
+                }
+            };
             c.setIds(R.layout.resultados_rows, R.id.autorR, R.id.tituloR, R.id.usuarioR, R.id.distR, R.id.botonListR);
 
             mList.setAdapter(c);
@@ -84,31 +98,7 @@ public class Resultados extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        saveState();
-        //outState.putSerializable(CategoryDbAdapter.KEY_ROWID, mRowId);
-    }
-    @Override
-    protected void onPause() {
-        super.onPause();
-        saveState();
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        fillData();
-    }
 
-    private void saveState() {
-        Intent i = new Intent(this,Menu.class);
-        startActivity(i);
-    }
-
-    public void onCambiar(){
-
-    }
 
 
 
