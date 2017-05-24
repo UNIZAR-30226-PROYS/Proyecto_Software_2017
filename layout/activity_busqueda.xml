@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_busqueda"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="barbarahliskov.cambialibros.Busqueda">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:text="ATRÁS"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="0.5"
+            android:layout_x="180dp"
+            android:layout_y="391dp"
+            android:id="@+id/button_patras"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:text="BUSCAR"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="0.5"
+            android:layout_x="25dp"
+            android:layout_y="391dp"
+            android:id="@+id/button_busqueda"
+            android:layout_alignBaseline="@+id/button_patras"
+            android:layout_alignBottom="@+id/button_patras"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="11dp"
+            android:layout_marginStart="11dp" />
+    </LinearLayout>
+
+
+    <EditText
+        android:id="@+id/text_title"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:hint="Introduzca título..."
+        android:layout_x="30dp"
+        android:layout_y="50dp"
+        android:background="@drawable/edittextstyle"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="49dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/user"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:hint="Introduza usuario..."
+        android:layout_x="30dp"
+        android:layout_y="210dp"
+        android:background="@drawable/edittextstyle"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="49dp"
+        android:layout_below="@+id/text_writer"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <RadioButton android:id="@+id/radio_coord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Coordenadas"
+        android:onClick="onCoordButtonClicked"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/radio_ciudad"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Introduzca un método de localización:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="11dp"
+        android:id="@+id/textView8"
+        android:layout_above="@+id/ciudad"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <RadioButton android:id="@+id/radio_ciudad"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Ciudad"
+    android:onClick="onCiudadButtonClicked"
+    android:layout_weight="1"
+    android:layout_marginTop="64dp"
+        android:layout_below="@+id/user"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_title"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/errorTitulo"
+        android:layout_alignRight="@+id/ciudad"
+        android:layout_alignEnd="@+id/ciudad" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_writer"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/errorAutor"
+        android:layout_alignRight="@+id/errorTitulo"
+        android:layout_alignEnd="@+id/errorTitulo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/errorusuario"
+        android:layout_alignRight="@+id/ciudad"
+        android:layout_alignEnd="@+id/ciudad" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radio_coord"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/errorLocalizacion"
+        android:layout_alignRight="@+id/longitud"
+        android:layout_alignEnd="@+id/longitud" />
+
+    <TextView
+        android:text="Introduzca un usuario:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv3"
+        android:layout_below="@+id/errorAutor"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Introduzca un título:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="17dp"
+        android:layout_alignRight="@+id/text_title"
+        android:layout_alignEnd="@+id/text_title" />
+
+    <TextView
+        android:text="Introduzca un autor:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv2"
+        android:layout_below="@+id/errorTitulo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/text_writer"
+        android:layout_width="270dp"
+        android:layout_height="wrap_content"
+        android:hint="Introduzca autor..."
+        android:layout_x="30dp"
+        android:layout_y="130dp"
+        android:background="@drawable/edittextstyle"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="31dp"
+        android:layout_below="@+id/errorTitulo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:id="@+id/ciudad"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:hint="Ciudad"
+        android:layout_x="180dp"
+        android:layout_y="295dp"
+        android:background="@drawable/edittextstyle"
+        android:paddingLeft="10dp"
+        android:layout_weight="1"
+        android:layout_alignBottom="@+id/radio_ciudad"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/latitud"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:hint="Lat"
+        android:layout_x="180dp"
+        android:layout_y="325dp"
+        android:background="@drawable/edittextstyle"
+        android:paddingLeft="10dp"
+        android:layout_alignBaseline="@+id/radio_coord"
+        android:layout_alignBottom="@+id/radio_coord"
+        android:layout_toRightOf="@+id/tv2"
+        android:layout_toEndOf="@+id/tv2" />
+
+    <EditText
+        android:id="@+id/longitud"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:hint="Lon"
+        android:layout_x="220dp"
+        android:layout_y="325dp"
+        android:background="@drawable/edittextstyle"
+        android:paddingLeft="10dp"
+        android:layout_weight="1"
+        android:layout_alignBaseline="@+id/latitud"
+        android:layout_alignBottom="@+id/latitud"
+        android:layout_toRightOf="@+id/latitud"
+        android:layout_toEndOf="@+id/latitud"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp" />
+
+
+</RelativeLayout>

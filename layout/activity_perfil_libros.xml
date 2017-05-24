@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_perfil"
+    android:id="@+id/activity_perfil_libros"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -34,15 +34,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="Nombre de usuario:"
+                android:text="Titulo:"
                 android:textSize="7pt"
                 android:textStyle="bold"
                 android:visibility="visible" />
 
             <TextView
-                android:id="@+id/user_email"
+                android:id="@+id/book_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textSize="10pt" />
@@ -54,13 +55,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5pt"
-        android:text="Nombre:"
+        android:text="Autor:"
         android:textSize="7pt"
         android:textStyle="bold"
         android:visibility="visible" />
 
     <TextView
-        android:id="@+id/user_name"
+        android:id="@+id/book_author"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
@@ -72,13 +73,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5pt"
-        android:text="Apellidos:"
+        android:text="Usuario:"
         android:textSize="7pt"
         android:textStyle="bold"
         android:visibility="visible" />
 
     <TextView
-        android:id="@+id/user_apellidos"
+        android:id="@+id/book_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
@@ -90,82 +91,46 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5pt"
-        android:text="Valoración media:"
+        android:text="Ciudad:"
         android:textSize="7pt"
         android:textStyle="bold"
         android:visibility="visible" />
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/book_loc"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <RatingBar
-            android:id="@+id/val_media"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:isIndicator="true"
-            android:numStars="5" />
-
-        <TextView
-            android:id="@+id/valoracion_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:textSize="15pt"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textSize="10pt" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5pt"
-        android:text="Valorar:"
+        android:text="Descripcion:"
         android:textSize="7pt"
         android:textStyle="bold"
         android:visibility="visible" />
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/book_desc"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <RatingBar
-            android:id="@+id/nueva_val"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:numStars="5" />
-
-        <Button
-            android:id="@+id/valorar_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text="VALORAR" />
-
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:textSize="10pt" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/libros_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:text="VER LIBROS" />
 
         <Button
             android:id="@+id/contactar_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
             android:text="CONTACTAR" />
 
     </RelativeLayout>
