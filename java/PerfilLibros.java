@@ -1,6 +1,8 @@
 package barbarahliskov.cambialibros;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,9 +24,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class PerfilLibros extends AppCompatActivity {
 
@@ -111,7 +115,30 @@ public class PerfilLibros extends AppCompatActivity {
             f.setVisibility(View.INVISIBLE);
         }
         desc.setText(parametros.get(5));
-        loc.setText(parametros.get(4));
+
+
+        String ciudad = "";
+        Geocoder gcd = new Geocoder(this, Locale.getDefault());
+        String coordS = parametros.get(4);
+        String latS = coordS.substring(0,coordS.indexOf(";"));
+        String lonS = coordS.substring(coordS.indexOf(";")+1,coordS.length());
+        List<Address> addresses = null;
+        try {
+            addresses = gcd.getFromLocation(Double.parseDouble(latS), Double.parseDouble(lonS), 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (!addresses.isEmpty())
+        {
+            ciudad = addresses.get(0).getLocality();
+        }
+        else
+        {
+            // do your staff
+        }
+
+
+        loc.setText(ciudad);
         Button f = (Button) findViewById(R.id.fav_button);
         if (!parametros.get(6).equals("0")) {
             f.setBackgroundResource(R.drawable.ic_slide_switch_on);

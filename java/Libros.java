@@ -23,9 +23,13 @@ import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
@@ -72,6 +76,8 @@ public class Libros extends AppCompatActivity {
 
 
     private void fillData() {
+
+        rows = new ArrayList<Row>();
 
         for (int i = 0; i < parametros.size(); i = i + 6) {
             rows.add(new Row(parametros.get(i + 1), parametros.get(i + 2), parametros.get(i + 3),
@@ -164,20 +170,31 @@ public class Libros extends AppCompatActivity {
             try {
 
 
-                String url_final = getString(R.string.dir) + "SearchBookServlet?nickv=" + user
-                        + "&nick_c=" + user1 + "&tittle=" + data[0];
+                String url_final = getString(R.string.dir) + "AddIntercambioServlet";
+
+
+
                 HttpClient httpClient = new DefaultHttpClient();
-                HttpGet request = new HttpGet();
-                URI website = new URI(url_final);
-                request.setURI(website);
-                //httpClient.execute(request);
+                HttpPost request = new HttpPost(url_final);
+                List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
+
+
+                postParameters.add(new BasicNameValuePair("nick_v", user));
+                postParameters.add(new BasicNameValuePair("nick_c", user1));
+                postParameters.add(new BasicNameValuePair("tittle", data[0]));
+
+
+                UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
+                        postParameters);
+
+                request.setEntity(formEntity);
 
                 HttpResponse response = httpClient.execute(request);
                 HttpEntity entity = response.getEntity();
 
                 // Read the contents of an entity and return it as a String.
                 String result = EntityUtils.toString(entity);
-                parametros = XML_Parser.parseaResultadoBusqueda(result);
+
 
 
 
@@ -185,8 +202,6 @@ public class Libros extends AppCompatActivity {
                 mue.printStackTrace();
             } catch (IOException ioe) {
                 ioe.printStackTrace();
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
             }
 
             return "BIEN";
@@ -195,7 +210,8 @@ public class Libros extends AppCompatActivity {
 
         protected void onPostExecute(String page) {
 
-            fillData();
+            user1 = null;
+
         }
 
     }

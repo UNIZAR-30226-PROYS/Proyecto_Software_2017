@@ -185,7 +185,7 @@ public class Busqueda extends AppCompatActivity {
                 }*/
 
 
-                if (titS.equals("") && autS.equals("") && usrS.equals("") && fallo){
+                if (titS.equals("") && autS.equals("") && usrS.equals("") && !(citB.isChecked() || cooB.isChecked())){
                     errorTitulo.setTextColor(Color.RED);
                     error = "Introduzca título";
                     errorTitulo.setText(error);
@@ -195,6 +195,9 @@ public class Busqueda extends AppCompatActivity {
                     errorUsuario.setTextColor(Color.RED);
                     error = "Introduzca usuario";
                     errorUsuario.setText(error);
+                    error = "Introduzca localización";
+                    errorLoc.setText(error);
+                    errorLoc.setTextColor(Color.RED);
                     fallo = true;
                 }
                 /*

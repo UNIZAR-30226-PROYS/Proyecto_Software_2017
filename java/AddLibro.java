@@ -49,6 +49,7 @@ public class AddLibro extends AppCompatActivity {
     private EditText mDesc;
     private String user;
     private String pass;
+    private String descr;
     private double latitude;
     private double longitude;
 
@@ -141,6 +142,7 @@ public class AddLibro extends AppCompatActivity {
                 focusView.requestFocus();
             }
             else{
+                descr = mDesc.getText().toString();
                 ciudad = Double.toString(latitude) + ";" + Double.toString(longitude);
                 new InsertBookTask().execute(new String[] {titulo, autor, ciudad, descripcion});
             }
@@ -171,7 +173,7 @@ public class AddLibro extends AppCompatActivity {
                 postParameters.add(new BasicNameValuePair("nick", user));
                 postParameters.add(new BasicNameValuePair("tittle", data[0]));
                 postParameters.add(new BasicNameValuePair("author", data[1]));
-                postParameters.add(new BasicNameValuePair("description", ""));
+                postParameters.add(new BasicNameValuePair("description", descr));
                 postParameters.add(new BasicNameValuePair("location", data[2]));
                 postParameters.add(new BasicNameValuePair("password", pass));
 

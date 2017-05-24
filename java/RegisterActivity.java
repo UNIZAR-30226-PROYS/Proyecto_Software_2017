@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -16,12 +17,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
@@ -35,6 +39,8 @@ public class RegisterActivity extends AppCompatActivity{
     private EditText mPassword2;
     private EditText mNombre;
     private EditText mApellido;
+    private boolean ok = true;
+    private boolean cancel = false;
 
     private String userS = "", nomS = "", apeS = "", pasS = "";
 
@@ -139,6 +145,7 @@ public class RegisterActivity extends AppCompatActivity{
             String text = "";
             BufferedReader reader = null;
 
+
             // Send data
             try
             {
@@ -157,9 +164,17 @@ public class RegisterActivity extends AppCompatActivity{
                         postParameters);
 
                 request.setEntity(formEntity);
-                httpClient.execute(request);
+                HttpResponse response = httpClient.execute(request);
 
-                // Defined URL  where to send data
+                // Recibir respuesta
+
+                HttpEntity entity = response.getEntity();
+
+                // Read the contents of an entity and return it as a String.
+                String result = EntityUtils.toString(entity);
+                Log.d(" Devuelto-> ", result);
+
+                ok = XML_Parser.parseaLogin(result);
 
 
             } catch(Exception e) {
@@ -172,7 +187,26 @@ public class RegisterActivity extends AppCompatActivity{
         }
 
         protected void onPostExecute(String page) {
-            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+
+            View focusView = null;
+            if(!ok){
+                mUsuario.setError("El usuario ya existe");
+                focusView = mUsuario;
+                cancel = true;
+            }
+
+            if (cancel) {
+                // There was an error; don't attempt login and focus the first
+                // form field with an error.
+                focusView.requestFocus();
+                cancel = false;
+                ok = true;
+            } else {
+                // Show a progress spinner, and kick off a background task to
+                // perform the user login attempt.
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            }
+
         }
     }
 }
