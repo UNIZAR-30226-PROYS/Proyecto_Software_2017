@@ -6,6 +6,7 @@ public class Row {
     private String titulo;
     private String autor;
     private String usuario;
+    private String city;
     private long dist;
     private int id;
 
@@ -21,6 +22,13 @@ public class Row {
         autor = a;
         usuario = u;
         dist = d;
+        id = -1;
+    }
+    Row (String t, String a, String u, String d){
+        titulo = t;
+        autor = a;
+        usuario = u;
+        city = d;
         id = -1;
     }
     Row (String t, String a, String u, Long d, int i){
@@ -88,10 +96,11 @@ public class Row {
         return this.dist;
     }
 
-    /**
-     *
-     * @param d localizacion del libro
-     */
+
+    String getCity(){
+        return this.city;
+    }
+
     void setDist(long d){
         this.dist = d;
     }

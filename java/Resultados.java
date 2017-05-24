@@ -2,6 +2,8 @@ package barbarahliskov.cambialibros;
 
 import android.content.Intent;
 import android.database.MatrixCursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,8 +14,10 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Resultados extends AppCompatActivity {
 
@@ -66,7 +70,26 @@ public class Resultados extends AppCompatActivity {
             ArrayList<String> parametros = b.getStringArrayList("parametros");
 
             for(int i = 0; i<parametros.size(); i=i+6){
-                rows.add(new Row(parametros.get(i+1),parametros.get(i+2),parametros.get(i+3), /*Long.parseLong(parametros.get(i+4))*/ (long) 4));
+                String ciudad = "";
+                Geocoder gcd = new Geocoder(this, Locale.getDefault());
+                String coordS = parametros.get(i+4);
+                String latS = coordS.substring(0,coordS.indexOf(";"));
+                String lonS = coordS.substring(coordS.indexOf(";"),coordS.length());
+                List<Address> addresses = null;
+                try {
+                    addresses = gcd.getFromLocation(Double.parseDouble(latS), Double.parseDouble(lonS), 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (addresses.size() > 0)
+                {
+                    ciudad = addresses.get(0).getLocality();
+                }
+                else
+                {
+                    // do your staff
+                }
+                rows.add(new Row(parametros.get(i+1),parametros.get(i+2),parametros.get(i+3), ciudad));
             }
 
             /*  rows.add(new Row("El Corredor Del Laberinto 1", "Dashner James", "Teresa", (long) 4));
