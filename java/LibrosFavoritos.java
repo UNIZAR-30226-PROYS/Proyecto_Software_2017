@@ -36,6 +36,9 @@ public class LibrosFavoritos extends AppCompatActivity {
 
     private ListView mList;
     ArrayList<String> parametros = new ArrayList<>();
+    private String user;
+    private String pass;
+    List<Row> rows = new ArrayList<Row>();
 
     /**
      * Called when the activity is first created.
@@ -48,20 +51,17 @@ public class LibrosFavoritos extends AppCompatActivity {
         setTitle("Libros favoritos");
         Button closeButton = (Button) findViewById(R.id.botonCerrar);
 
+        user = getIntent().getExtras().getString("user");
+        pass = getIntent().getExtras().getString("pass");
+
         closeButton.setVisibility(View.INVISIBLE);
         mList = (ListView)findViewById(R.id.list);
 
-        new LibrosFavoritos.SearchFavsBooksTask().execute();
+        //new LibrosFavoritos.SearchFavsBooksTask().execute();
     }
 
 
     private void fillData(){
-
-
-        List<Row> rows = new ArrayList<Row>(30);
-        Row row = null;
-
-        if (!parametros.isEmpty()) {
 
             for (int i = 0; i < parametros.size(); i = i + 6) {
                 rows.add(new Row(parametros.get(i + 1), parametros.get(i + 2), parametros.get(i + 3),
@@ -78,19 +78,6 @@ public class LibrosFavoritos extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Button button = (Button) v;
-
-                    /*if (button.isActivated()) {
-                        button.setBackgroundResource(R.drawable.ic_slide_switch_on);
-                        Toast.makeText(getApplicationContext(), "Guardado como favorito",
-                                Toast.LENGTH_SHORT).show();
-                        button.setActivated(false);
-                    } else {
-                        button.setBackgroundResource(R.drawable.ic_slide_switch_off);
-
-                        Toast.makeText(getApplicationContext(), "Favorito borrado",
-                                Toast.LENGTH_SHORT).show();
-                        button.setActivated(true);
-                    }*/
 
                     button.setBackgroundResource(R.drawable.ic_slide_switch_off);
                     //this.getView((int) v.getTag(), v);
@@ -114,12 +101,21 @@ public class LibrosFavoritos extends AppCompatActivity {
             c.setIds(R.layout.activity_libros_favoritos, R.id.ciudadLibroF, R.id.nombreLibroF, R.id.usuarioLibroF, R.id.distLibroF, R.id.botonFav);
 
             mList.setAdapter(c);
-        }
 
-        else{
-            TextView empty = (TextView) findViewById(R.id.empty);
-            empty.setWidth(0);
-        }
+            mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String idBook = String.valueOf(rows.get(position).getId());
+
+                    Intent i = new Intent(LibrosFavoritos.this, PerfilLibros.class);
+                    // Enviar el nombre del usuario
+                    i.putExtra("idBook", idBook);
+                    i.putExtra("user", user);
+                    i.putExtra("pass", pass);
+                    startActivity(i);
+                }
+            });
 
 
 
@@ -130,8 +126,7 @@ public class LibrosFavoritos extends AppCompatActivity {
 
             try {
 
-                String miNombre = "Laura";
-                String url = "http://10.0.2.2:8080/CambiaLibros/SearchFavBookServlet?nick=" + miNombre;
+                String url = getString(R.string.dir) + "SearchFavBookServlet?nick=" + user;
 
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpGet request = new HttpGet();
@@ -176,15 +171,14 @@ public class LibrosFavoritos extends AppCompatActivity {
 
             try {
 
-                String miNombre = "Laura";
                 String idBook = data[0];
-                String url = "http://10.0.2.2:8080/CambiaLibros/DeleteFavBookServlet";
+                String url = getString(R.string.dir) + "DeleteFavBookServlet";
 
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost request = new HttpPost(url);
                 List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 
-                postParameters.add(new BasicNameValuePair("nick", miNombre));
+                postParameters.add(new BasicNameValuePair("nick", user));
                 postParameters.add(new BasicNameValuePair("id_book", idBook));
 
 
@@ -211,4 +205,10 @@ public class LibrosFavoritos extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        rows =  new ArrayList<Row>();
+        new LibrosFavoritos.SearchFavsBooksTask().execute();
+    }
 }

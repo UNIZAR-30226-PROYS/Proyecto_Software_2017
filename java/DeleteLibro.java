@@ -37,7 +37,9 @@ public class DeleteLibro extends AppCompatActivity {
     ArrayList<String> parametros = new ArrayList<>();
     List<Row> rows = new ArrayList<Row>();
     Row row = null;
-    String url_final = "http://10.0.2.2:8080/CambiaLibros/SearchBookServlet?nick=Laura&nick_b=Laura";
+    private String user;
+    private String pass;
+
 
     /**
      * Called when the activity is first created.
@@ -46,15 +48,14 @@ public class DeleteLibro extends AppCompatActivity {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-        /* PRUEBAS */
-
-
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_list);
         setTitle("Mis libros");
         Button closeButton = (Button) findViewById(R.id.botonCerrar);
+
+        user = getIntent().getExtras().getString("user");
+        pass = getIntent().getExtras().getString("pass");
 
         closeButton.setVisibility(View.INVISIBLE);
         mList = (ListView) findViewById(R.id.list);
@@ -96,9 +97,6 @@ public class DeleteLibro extends AppCompatActivity {
 
     private void fillData() {
 
-        if(!parametros.isEmpty()) {
-
-
             for (int i = 0; i < parametros.size(); i = i + 6) {
                 rows.add(new Row(parametros.get(i + 1), parametros.get(i + 2), parametros.get(i + 3),
                     /*Long.parseLong(parametros.get(i+4))*/ (long) 4, Integer.parseInt(parametros.get(i))));
@@ -115,11 +113,6 @@ public class DeleteLibro extends AppCompatActivity {
             c.setIds(R.layout.activity_libros, R.id.ciudadMiLi, R.id.nombreMiLi, R.id.usuarioMiLi, R.id.distMiLi, R.id.FavMiLi);
 
             mList.setAdapter(c);
-        }
-        else{
-            TextView empty = (TextView) findViewById(R.id.empty);
-            empty.setWidth(0);
-        }
 
 
     }
@@ -134,14 +127,14 @@ public class DeleteLibro extends AppCompatActivity {
             // Send data
             try
             {
-                String url = "http://10.0.2.2:8080/CambiaLibros/DeleteBookServlet";
+                String url = getString(R.string.dir) + "DeleteBookServlet";
 
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost request = new HttpPost(url);
                 List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 
-                postParameters.add(new BasicNameValuePair("nick", "Laura"));
-                postParameters.add(new BasicNameValuePair("password", "12345"));
+                postParameters.add(new BasicNameValuePair("nick", user));
+                postParameters.add(new BasicNameValuePair("password", pass));
                 postParameters.add(new BasicNameValuePair("id_book", data[0]));
 
                 UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
@@ -168,6 +161,7 @@ public class DeleteLibro extends AppCompatActivity {
         }
 
         protected void onPostExecute(String page) {
+            rows = new ArrayList<Row>();
             new SearchBookTask().execute(new String[]{});
         }
 
@@ -179,6 +173,8 @@ public class DeleteLibro extends AppCompatActivity {
 
             try {
 
+                String url_final = getString(R.string.dir) + "SearchBookServlet?nick=" + user
+                        + "&nick_b=" + user;
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpGet request = new HttpGet();
                 URI website = new URI(url_final);

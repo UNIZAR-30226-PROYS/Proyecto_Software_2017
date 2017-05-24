@@ -24,12 +24,12 @@ public class Row {
         dist = d;
         id = -1;
     }
-    Row (String t, String a, String u, String d){
+    Row (String t, String a, String u, String d, int i){
         titulo = t;
         autor = a;
         usuario = u;
         city = d;
-        id = -1;
+        id = i;
     }
     Row (String t, String a, String u, Long d, int i){
         titulo = t;

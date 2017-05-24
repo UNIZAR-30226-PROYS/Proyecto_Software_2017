@@ -39,6 +39,10 @@ public class UsuariosFavoritos extends AppCompatActivity {
 
     private ListView mList;
     ArrayList<String> parametros = new ArrayList<>();
+    CustomArrayAdapter c = null;
+    List<Row> rows = new ArrayList<Row>();
+    private String user;
+    private String pass;
 
     /**
      * Called when the activity is first created.
@@ -54,49 +58,28 @@ public class UsuariosFavoritos extends AppCompatActivity {
         closeButton.setVisibility(View.INVISIBLE);
         mList = (ListView)findViewById(R.id.list);
 
-        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        user = getIntent().getExtras().getString("user");
+        pass = getIntent().getExtras().getString("pass");
 
 
-                Intent i = new Intent(UsuariosFavoritos.this, PerfilUsuarios.class);
-                // Enviar el nombre del usuario
-                i.putExtra("PerfilUser", "user1");
-                startActivity(i);
-            }
-        });
-
-        new UsuariosFavoritos.SearchFavsUsersTask().execute();
-
-        //new UsuariosFavoritos.SearchFavsUsersTask().execute(prueba);
+        /*List<Row> rows = new ArrayList<Row>();
+        new UsuariosFavoritos.SearchFavsUsersTask().execute();*/
     }
 
 
     private void fillData(){
 
-            List<Row> rows = new ArrayList<Row>();
-            Row row = null;
-
             for (int i = 0; i < parametros.size(); i = i + 5) {
                 rows.add(new Row(parametros.get(i), "", "", (long) 0));
             }
 
-        /*
-        rows.add(new Row("Juan123", "Zaragoza", "",(long) 0));
-        rows.add(new Row("Vic93", "Zaragoza", "", (long) 1));
-        rows.add(new Row("Aniita94", "Huesca", "", (long) 2));
-        rows.add(new Row("Teresa", "Barcelona", "", (long) 4));
-        rows.add(new Row("usuario6", "Teruel","", (long) 4));
-        rows.add(new Row("Pedro.Garcia", "Zaragoza", "", (long) 4));
-        */
 
             if (!rows.isEmpty()) {
                 TextView empty = (TextView) findViewById(R.id.empty);
                 empty.setWidth(0);
             }
 
-            CustomArrayAdapter c = new CustomArrayAdapter(this, rows) {
+            c = new CustomArrayAdapter(this, rows) {
                 @Override
                 public void onClick(View v) {
                     Button button = (Button) v;
@@ -104,18 +87,33 @@ public class UsuariosFavoritos extends AppCompatActivity {
                     button.setBackgroundResource(R.drawable.ic_slide_switch_off);
 
 
-                    String user = (String) v.getTag(R.id.key_1);
-                    Toast.makeText(this.getContext(), user + " eliminado de favoritos", Toast.LENGTH_SHORT).show();
+                    String userB = (String) v.getTag(R.id.key_1);
+                    Toast.makeText(this.getContext(), userB + " eliminado de favoritos", Toast.LENGTH_SHORT).show();
 
                     button.setActivated(true);
 
                     // Eliminar de favoritos
-                    new UsuariosFavoritos.DeleteFavUserTask().execute(user);
+                    new UsuariosFavoritos.DeleteFavUserTask().execute(userB);
                 }
             };
             c.setIds(R.layout.rows_usuarios_favoritos, R.id.ciudadF, R.id.nombreF, R.id.usuarioF, R.id.distF, R.id.botonFav);
 
             mList.setAdapter(c);
+
+            mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String userB = rows.get(position).getTitulo();
+
+                    Intent i = new Intent(UsuariosFavoritos.this, PerfilUsuarios.class);
+                    // Enviar el nombre del usuario
+                    i.putExtra("userB", userB);
+                    i.putExtra("user", user);
+                    i.putExtra("pass", pass);
+                    startActivity(i);
+                }
+            });
 
 
 
@@ -127,8 +125,7 @@ public class UsuariosFavoritos extends AppCompatActivity {
 
             try {
 
-                String miNombre = "Laura";
-                String url = "http://10.0.2.2:8080/CambiaLibros/SearchFavUserServlet?nick=" + miNombre;
+                String url = getString(R.string.dir) + "SearchFavUserServlet?nick=" + user;
 
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpGet request = new HttpGet();
@@ -142,7 +139,6 @@ public class UsuariosFavoritos extends AppCompatActivity {
                 // Read the contents of an entity and return it as a String.
                 String result = EntityUtils.toString(entity);
 
-                //String result = data[0];
 
                 parametros = XML_Parser.parseaResultadoFavsUsers(result);
 
@@ -174,16 +170,14 @@ public class UsuariosFavoritos extends AppCompatActivity {
 
             try {
 
-                String miNombre = "Laura";
-                String user = data[0];
-                String url = "http://10.0.2.2:8080/CambiaLibros/DeleteFavUserServlet";
+                String url = getString(R.string.dir) + "DeleteFavUserServlet";
 
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost request = new HttpPost(url);
                 List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 
-                postParameters.add(new BasicNameValuePair("nick", miNombre));
-                postParameters.add(new BasicNameValuePair("fav_nick", user));
+                postParameters.add(new BasicNameValuePair("nick", user));
+                postParameters.add(new BasicNameValuePair("fav_nick", data[0]));
 
 
 
@@ -205,9 +199,16 @@ public class UsuariosFavoritos extends AppCompatActivity {
         }
 
         protected void onPostExecute(String page) {
+            rows =  new ArrayList<Row>();
             new UsuariosFavoritos.SearchFavsUsersTask().execute();
         }
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        rows =  new ArrayList<Row>();
+        new UsuariosFavoritos.SearchFavsUsersTask().execute();
+    }
 }

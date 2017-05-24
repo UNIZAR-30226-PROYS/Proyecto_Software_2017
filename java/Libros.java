@@ -38,6 +38,12 @@ import java.util.List;
 public class Libros extends AppCompatActivity {
 
     private ListView mList;
+    private String user;
+    private String user1 = "";
+    private String userB;
+    private String pass;
+    List<Row> rows = new ArrayList<Row>();
+    ArrayList<String> parametros = new ArrayList<String>();
 
     /**
      * Called when the activity is first created.
@@ -48,6 +54,11 @@ public class Libros extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        user = getIntent().getExtras().getString("user");
+        user1 = getIntent().getExtras().getString("user1");
+        userB = getIntent().getExtras().getString("userB");
+        pass = getIntent().getExtras().getString("pass");
+
         setContentView(R.layout.activity_list);
         setTitle("Libros");
         Button closeButton = (Button) findViewById(R.id.botonCerrar);
@@ -55,46 +66,51 @@ public class Libros extends AppCompatActivity {
         closeButton.setVisibility(View.INVISIBLE);
         mList = (ListView) findViewById(R.id.list);
 
-        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            }
-        });
-
         new Libros.SearchBookTask().execute();
 
     }
 
 
-    private void fillData(ArrayList<String> parametros) {
-        List<Row> rows = new ArrayList<Row>(30);
-        Row row = null;
+    private void fillData() {
 
-        if(!parametros.isEmpty()) {
-
-
-            for (int i = 0; i < parametros.size(); i = i + 6) {
-                rows.add(new Row(parametros.get(i + 1), parametros.get(i + 2), parametros.get(i + 3),
-                    /*Long.parseLong(parametros.get(i+4))*/ (long) 4, Integer.parseInt(parametros.get(i))));
-            }
-
-
-            if (!rows.isEmpty()) {
-                TextView empty = (TextView) findViewById(R.id.empty);
-                empty.setWidth(0);
-            }
-
-            CustomArrayAdapter c = new CustomArrayAdapter(this, rows);
-
-            c.setIds(R.layout.activity_libros, R.id.ciudadMiLi, R.id.nombreMiLi, R.id.usuarioMiLi, R.id.distMiLi, R.id.FavMiLi);
-
-            mList.setAdapter(c);
+        for (int i = 0; i < parametros.size(); i = i + 6) {
+            rows.add(new Row(parametros.get(i + 1), parametros.get(i + 2), parametros.get(i + 3),
+                /*Long.parseLong(parametros.get(i+4))*/ (long) 4, Integer.parseInt(parametros.get(i))));
         }
-        else{
+
+
+        if (!rows.isEmpty()) {
             TextView empty = (TextView) findViewById(R.id.empty);
             empty.setWidth(0);
         }
+
+        CustomArrayAdapter c = new CustomArrayAdapter(this, rows);
+
+        c.setIds(R.layout.activity_libros, R.id.ciudadMiLi, R.id.nombreMiLi, R.id.usuarioMiLi, R.id.distMiLi, R.id.FavMiLi);
+
+        mList.setAdapter(c);
+
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String title = String.valueOf(rows.get(position).getTitulo());
+                String idBook = String.valueOf(rows.get(position).getId());
+
+                if (user1 == null) {
+                    Intent i = new Intent(Libros.this, PerfilLibros.class);
+                    // Enviar el nombre del usuario
+                    i.putExtra("idBook", idBook);
+                    i.putExtra("user", user);
+                    i.putExtra("pass", pass);
+                    startActivity(i);
+                }
+                else{
+                    new Libros.AddIntercambioTask().execute(title);
+                }
+            }
+        });
+
 
 
     }
@@ -106,7 +122,8 @@ public class Libros extends AppCompatActivity {
             try {
 
 
-                String url_final = "http://10.0.2.2:8080/CambiaLibros/SearchBookServlet?nick=Laura&nick_b=Laura";
+                String url_final = getString(R.string.dir) + "SearchBookServlet?nick=" + user
+                        + "&nick_b=" + user;
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpGet request = new HttpGet();
                 URI website = new URI(url_final);
@@ -118,10 +135,8 @@ public class Libros extends AppCompatActivity {
 
                 // Read the contents of an entity and return it as a String.
                 String result = EntityUtils.toString(entity);
-                ArrayList<String> parametros = XML_Parser.parseaResultadoBusqueda(result);
+                parametros = XML_Parser.parseaResultadoBusqueda(result);
 
-
-                fillData(parametros);
 
 
             } catch (MalformedURLException mue) {
@@ -135,13 +150,54 @@ public class Libros extends AppCompatActivity {
             return "BIEN";
 
         }
-        /*
+
         protected void onPostExecute(String page) {
-            //textView.setText(page);
-            Toast toast = Toast.makeText(getApplicationContext(), page, Toast.LENGTH_SHORT);
-            toast.show();
+
+            fillData();
         }
-        */
+
+    }
+
+    private class AddIntercambioTask extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... data) {
+
+            try {
+
+
+                String url_final = getString(R.string.dir) + "SearchBookServlet?nickv=" + user
+                        + "&nick_c=" + user1 + "&tittle=" + data[0];
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpGet request = new HttpGet();
+                URI website = new URI(url_final);
+                request.setURI(website);
+                //httpClient.execute(request);
+
+                HttpResponse response = httpClient.execute(request);
+                HttpEntity entity = response.getEntity();
+
+                // Read the contents of an entity and return it as a String.
+                String result = EntityUtils.toString(entity);
+                parametros = XML_Parser.parseaResultadoBusqueda(result);
+
+
+
+            } catch (MalformedURLException mue) {
+                mue.printStackTrace();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+            return "BIEN";
+
+        }
+
+        protected void onPostExecute(String page) {
+
+            fillData();
+        }
+
     }
 
 

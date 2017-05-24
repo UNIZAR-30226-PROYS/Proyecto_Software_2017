@@ -46,8 +46,8 @@ import java.util.List;
 
 public class Busqueda extends AppCompatActivity {
 
-
-
+    private String user;
+    private String pass;
     double xml_latitude;
     double xml_longitude;
 
@@ -63,7 +63,8 @@ public class Busqueda extends AppCompatActivity {
         setContentView(R.layout.activity_busqueda);
         setTitle("Búsqueda");
 
-
+        user = getIntent().getExtras().getString("user");
+        pass = getIntent().getExtras().getString("pass");
 
         /* Invisibiliza los campos aún no decididos */
         EditText ciudad = (EditText) findViewById(R.id.ciudad);
@@ -72,8 +73,6 @@ public class Busqueda extends AppCompatActivity {
         lat.setVisibility(View.INVISIBLE);
         EditText lon = (EditText) findViewById(R.id.longitud);
         lon.setVisibility(View.INVISIBLE);
-
-
 
 
         /* Prepara el botón de Ciudad para visibilizar los campos
@@ -178,15 +177,15 @@ public class Busqueda extends AppCompatActivity {
                     errorLoc.setText(error);
                     errorLoc.setTextColor(Color.RED);
                     fallo = true;
-                } /* else if ((!citB.isChecked()) && (!cooB.isChecked())){
+                } /*else if ((!citB.isChecked()) && (!cooB.isChecked())){
                     error = "Seleccione una opción.";
                     errorLoc.setText(error);
                     errorLoc.setTextColor(Color.RED);
                     fallo = true;
-                } */
+                }*/
 
 
-                if (titS.equals("") && autS.equals("") && usrS.equals("")){
+                if (titS.equals("") && autS.equals("") && usrS.equals("") && fallo){
                     errorTitulo.setTextColor(Color.RED);
                     error = "Introduzca título";
                     errorTitulo.setText(error);
@@ -217,8 +216,7 @@ public class Busqueda extends AppCompatActivity {
 
                 if(!fallo){
 
-                    String miNombre="Laura";
-                    String bookSearch = "http://10.0.2.2:8080/CambiaLibros/SearchBookServlet?nick=" + miNombre;
+                    String bookSearch = getString(R.string.dir) + "SearchBookServlet?nick=" + user;
                     if (!titS.equals("")){
                         bookSearch += "&tittle="+titS;
                     }
@@ -370,13 +368,14 @@ public class Busqueda extends AppCompatActivity {
                 // Read the contents of an entity and return it as a String.
                 String result = EntityUtils.toString(entity);
                 Log.d("url", url_final);
-                Log.d("Devuelto-> ", result);
 
                 ArrayList<String> parametros = XML_Parser.parseaResultadoBusqueda(result);
                 Intent intent = new Intent(Busqueda.this, Resultados.class);
                 Bundle b = new Bundle();
                 b.putSerializable("parametros", parametros);
                 intent.putExtras(b);
+                intent.putExtra("user", user);
+                intent.putExtra("pass", pass);
                 startActivity(intent);
                 finish();
             } catch (MalformedURLException mue) {

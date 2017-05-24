@@ -163,7 +163,10 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            startActivity(new Intent(LoginActivity.this, Novedades.class));
+            Intent i = new Intent(LoginActivity.this, Novedades.class);
+            i.putExtra("user", email);
+            i.putExtra("pass", password);
+            startActivity(i);
         }
     }
 
@@ -214,7 +217,7 @@ public class LoginActivity extends AppCompatActivity {
 
             try {
 
-                String url = "http://10.0.2.2:8080/CambiaLibros/LogInServlet";
+                String url = getString(R.string.dir) + "LogInServlet";
 
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost request = new HttpPost(url);

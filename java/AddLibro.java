@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,6 +46,11 @@ public class AddLibro extends AppCompatActivity {
     private EditText mTitulo;
     private EditText mAutor;
     private EditText mCiudad;
+    private EditText mDesc;
+    private String user;
+    private String pass;
+    private double latitude;
+    private double longitude;
 
 
     @Override
@@ -57,29 +63,38 @@ public class AddLibro extends AppCompatActivity {
         mTitulo = (EditText) findViewById(R.id.bookTituloAdd);
         mCiudad = (EditText) findViewById(R.id.bookLocationADD);
         mAutor = (EditText) findViewById(R.id.bookAutorAdd);
+        mDesc = (EditText) findViewById(R.id.bookDescription);
 
+        user = getIntent().getExtras().getString("user");
+        pass = getIntent().getExtras().getString("pass");
 
         Button btn = (Button) findViewById(R.id.uploadBook_button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptRegister();
-
-
-                String data = null;
-                try {
-                   /* EN PRINCIPIO; AQUI SE CREARA UN ARRAY DE STRING PARA PASARSELO DE PARAMETRO A LA FUNCION*/
-
-                    new InsertBookTask().execute(new String[] {data});
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
             }
         });
 
+        mCiudad.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                try {
+                    Geocoder geocoder = new Geocoder(AddLibro.this);
+                    List<android.location.Address> addresses;
+
+                    addresses = geocoder.getFromLocationName(mCiudad.getText().toString(), 1);
+
+                    if (addresses.size() > 0) {
+                        latitude = addresses.get(0).getLatitude();
+                        longitude = addresses.get(0).getLongitude();
+                        ( (TextView) findViewById(R.id.coordsadd)).setText("Lat " + latitude + ", Lon " + longitude);
+                    }
+                } catch (Exception e){
+
+                }
+            }
+        });
 
     }
 
@@ -95,6 +110,7 @@ public class AddLibro extends AppCompatActivity {
             String titulo = mTitulo.getText().toString();
             String autor = mAutor.getText().toString();
             String ciudad = mCiudad.getText().toString();
+            String descripcion = mDesc.getText().toString();
 
             boolean cancel = false;
             View focusView = null;
@@ -106,14 +122,27 @@ public class AddLibro extends AppCompatActivity {
                 cancel = true;
             }
             if (TextUtils.isEmpty(autor)) {
-                mTitulo.setError("Introduzca algún autor.");
+                mAutor.setError("Introduzca algún autor.");
                 focusView = mAutor;
                 cancel = true;
             }
             if (TextUtils.isEmpty(ciudad)) {
-                mTitulo.setError("Introduzca alguna ciudad.");
+                mCiudad.setError("Introduzca alguna ciudad.");
                 focusView = mCiudad;
                 cancel = true;
+            }
+            if (TextUtils.isEmpty(descripcion)) {
+                mDesc.setError("Introduzca alguna descripcion.");
+                focusView = mDesc;
+                cancel = true;
+            }
+
+            if(cancel){
+                focusView.requestFocus();
+            }
+            else{
+                ciudad = Double.toString(latitude) + ";" + Double.toString(longitude);
+                new InsertBookTask().execute(new String[] {titulo, autor, ciudad, descripcion});
             }
         } catch (Exception e){
 
@@ -132,18 +161,19 @@ public class AddLibro extends AppCompatActivity {
             // Send data
             try
             {
-                String url = "http://10.0.2.2:8080/CambiaLibros/InsertBookServlet";
+                String url = getString(R.string.dir) + "InsertBookServlet";
 
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost request = new HttpPost(url);
                 List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 
-                postParameters.add(new BasicNameValuePair("nick", "Laura"));
-                postParameters.add(new BasicNameValuePair("tittle", "Titulo"));
-                postParameters.add(new BasicNameValuePair("author", "Autorrrr"));
-                postParameters.add(new BasicNameValuePair("description", "Descripcion"));
-                postParameters.add(new BasicNameValuePair("location", "locloc"));
-                postParameters.add(new BasicNameValuePair("password", "12345"));
+
+                postParameters.add(new BasicNameValuePair("nick", user));
+                postParameters.add(new BasicNameValuePair("tittle", data[0]));
+                postParameters.add(new BasicNameValuePair("author", data[1]));
+                postParameters.add(new BasicNameValuePair("description", ""));
+                postParameters.add(new BasicNameValuePair("location", data[2]));
+                postParameters.add(new BasicNameValuePair("password", pass));
 
                 UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
                         postParameters);
@@ -164,8 +194,12 @@ public class AddLibro extends AppCompatActivity {
         }
 
         protected void onPostExecute(String page) {
+            Intent i = new Intent(AddLibro.this, Libros.class);
+            i.putExtra("user", user);
+            i.putExtra("userB", user);
+            i.putExtra("pass", pass);
 
-            startActivity(new Intent(AddLibro.this, Libros.class));
+            startActivity(i);
         }
     }
 

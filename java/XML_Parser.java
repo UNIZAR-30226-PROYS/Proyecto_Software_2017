@@ -191,4 +191,46 @@ public class XML_Parser {
             return false;
         }
     }
+
+    static ArrayList<String> parseaResultadoBook(String XML) {
+        /* Quitamos los saltos de linea */
+        XML = XML.replace("\n", "");
+        /* Parseamos la cabecera de la búsqueda */
+        ArrayList<String> parametros = new ArrayList<String>();
+        /* Quitamos la cabecera */
+        String parseado = XML.substring(XML.indexOf(">") + 1);
+        /* Quitamos la parte de <busqueda nick="Barbara96"> */
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        /* Quitamos la parte de <libro> */
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        /* Quitamos el <id_libro> */
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        parametros.add(parseado.substring(0, parseado.indexOf("<")));
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        /* Quitamos el <titulo> */
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        parametros.add(parseado.substring(0, parseado.indexOf("<")));
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        /* Quitamos el <autor> */
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        parametros.add(parseado.substring(0, parseado.indexOf("<")));
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        /* Quitamos el <usuario> */
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        parametros.add(parseado.substring(0, parseado.indexOf("<")));
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        /* Quitamos el <localizacion> */
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        parametros.add(parseado.substring(0, parseado.indexOf("<")));
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        /* Quitamos el <descripcion> */
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        parametros.add(parseado.substring(0, parseado.indexOf("<")));
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        /* Quitamos el <favorito> */
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        parametros.add(parseado.substring(0, parseado.indexOf("<")));
+        parseado = parseado.substring(parseado.indexOf(">") + 1);
+        return parametros;
+    }
 }

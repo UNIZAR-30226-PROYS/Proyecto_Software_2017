@@ -34,9 +34,11 @@ public class PerfilUsuarios extends AppCompatActivity {
     private TextView nombre;
     private TextView apellidos;
     private String usuario; //usuario que esta logueado en la aplicación
+    private String pass;
     private String usuarioBuscado; //Usuario del cual se va a mostrar la informacion
     private RatingBar valmed;
     private TextView valnum;
+    private Float valMedia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +50,10 @@ public class PerfilUsuarios extends AppCompatActivity {
 
         valmed = (RatingBar) findViewById(R.id.val_media);
         valnum = (TextView) findViewById(R.id.valoracion_num);
-        usuario = "Laura"; //tendría que recibirlo de la actividad anterior
-        usuarioBuscado = getIntent().getExtras().getString("PerfilUser");
+        usuario = getIntent().getExtras().getString("user");
+        pass = getIntent().getExtras().getString("pass");
+        usuarioBuscado = getIntent().getExtras().getString("userB");
         //usuarioBuscado = "user1"; // tendría que recibir el usuario de la actividad anterior
-        Log.d("usuario--------->", usuarioBuscado);
 
         final RatingBar valoracion = (RatingBar) findViewById(R.id.nueva_val);
         Button v = (Button) findViewById(R.id.valorar_button);
@@ -65,9 +67,10 @@ public class PerfilUsuarios extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Float rating = valoracion.getRating();
+                valMedia = (rating+valMedia)/2;
                 Toast.makeText(getApplicationContext(), "Valoracion: " + rating,
                         Toast.LENGTH_SHORT).show();
-                new PerfilUsuarios.UpdateValUserTask().execute(new String[]{usuarioBuscado, rating.toString()});
+                new PerfilUsuarios.UpdateValUserTask().execute(new String[]{usuarioBuscado, valMedia.toString()});
                 v.setEnabled(false);
                 valoracion.setEnabled(false);
             }
@@ -79,6 +82,9 @@ public class PerfilUsuarios extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(PerfilUsuarios.this, Chat.class);
+                i.putExtra("user", usuario);
+                i.putExtra("user1", usuarioBuscado);
+                i.putExtra("pass", pass);
                 startActivity(i);
             }
         });
@@ -89,6 +95,9 @@ public class PerfilUsuarios extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(PerfilUsuarios.this, Libros.class);
+                i.putExtra("user", usuario);
+                i.putExtra("userB", usuarioBuscado);
+                i.putExtra("pass", pass);
                 startActivity(i);
             }
         });
@@ -102,13 +111,13 @@ public class PerfilUsuarios extends AppCompatActivity {
             public void onClick(View v) {
                 Button button = (Button) v;
                 if (button.isActivated()) {
-                    new PerfilUsuarios.DeleteFavUserTask().execute(new String[]{usuario, usuarioBuscado});
+                    new PerfilUsuarios.AddFavUserTask().execute(new String[]{usuario, usuarioBuscado});
                     button.setBackgroundResource(R.drawable.ic_slide_switch_on);
                     Toast.makeText(getApplicationContext(), "Guardado como favorito",
                             Toast.LENGTH_SHORT).show();
                     button.setActivated(false);
                 } else {
-                    new PerfilUsuarios.AddFavUserTask().execute(new String[]{usuario, usuarioBuscado});
+                    new PerfilUsuarios.DeleteFavUserTask().execute(new String[]{usuario, usuarioBuscado});
                     button.setBackgroundResource(R.drawable.ic_slide_switch_off);
 
                     Toast.makeText(getApplicationContext(), "Favorito borrado",
@@ -124,14 +133,15 @@ public class PerfilUsuarios extends AppCompatActivity {
     private void fillData(ArrayList<String> parametros) {
         nombre.setText(parametros.get(1));
         apellidos.setText(parametros.get(2));
-        valmed.setRating(Float.parseFloat(parametros.get(3)));
+        valMedia = Float.parseFloat(parametros.get(3));
+        valmed.setRating(valMedia);
         valnum.setText(parametros.get(3) + "/5");
         Button f = (Button) findViewById(R.id.fav_button);
-        if (parametros.get(4).equals("si")) {
+        if (!parametros.get(4).equals("0")) {
             f.setBackgroundResource(R.drawable.ic_slide_switch_on);
-            f.setActivated(true);
-        } else {
             f.setActivated(false);
+        } else {
+            f.setActivated(true);
             f.setBackgroundResource(R.drawable.ic_slide_switch_off);
         }
     }
@@ -140,7 +150,7 @@ public class PerfilUsuarios extends AppCompatActivity {
         @Override
         protected String doInBackground(String... data) {
             try {
-                String url = "http://10.0.2.2:8080/CambiaLibros/GetUserServlet?nick=" + data[0]
+                String url = getString(R.string.dir) + "GetUserServlet?nick=" + data[0]
                         + "&nick_s=" + data[1];
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpGet request = new HttpGet();
@@ -174,7 +184,7 @@ public class PerfilUsuarios extends AppCompatActivity {
     private class DeleteFavUserTask extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... data) {
             try {
-                String url = "http://10.0.2.2:8080/CambiaLibros/DeleteFavUserServlet";
+                String url = getString(R.string.dir) + "DeleteFavUserServlet";
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost request = new HttpPost(url);
                 List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
@@ -197,7 +207,7 @@ public class PerfilUsuarios extends AppCompatActivity {
     private class AddFavUserTask extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... data) {
             try {
-                String url = "http://10.0.2.2:8080/CambiaLibros/AddFavUserServlet";
+                String url = getString(R.string.dir) + "AddFavUserServlet";
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost request = new HttpPost(url);
                 List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
@@ -220,7 +230,7 @@ public class PerfilUsuarios extends AppCompatActivity {
     private class UpdateValUserTask extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... data) {
             try {
-                String url = "http://10.0.2.2:8080/CambiaLibros/UpdateValoracionServlet";
+                String url = getString(R.string.dir) + "UpdateValoracionServlet";
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost request = new HttpPost(url);
                 List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
@@ -237,6 +247,9 @@ public class PerfilUsuarios extends AppCompatActivity {
             }
 
             return "BIEN";
+        }
+        protected void onPostExecute(String page) {
+            new PerfilUsuarios.SearchUserTask().execute(new String[]{usuario, usuarioBuscado});
         }
     }
 

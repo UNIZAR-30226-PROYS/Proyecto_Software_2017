@@ -32,8 +32,11 @@ public class Historial extends AppCompatActivity {
 
     private ListView mList;
     ArrayList<String> parametros = new ArrayList<String>();
+    List<Row> rows = new ArrayList<Row>();
 
     String url_final = "";
+    private String user;
+    private String pass;
 
 
     @Override
@@ -46,21 +49,13 @@ public class Historial extends AppCompatActivity {
         closeButton.setVisibility(View.INVISIBLE);
         mList = (ListView)findViewById(R.id.list);
 
+        user = getIntent().getExtras().getString("user");
+        pass = getIntent().getExtras().getString("pass");
 
+        String bookSearch = getString(R.string.dir) + "SearchIntercambioServlet?nick=" + user;
 
-
-        String miNombre="Danny";
-        String bookSearch = "http://10.0.2.2:8080/CambiaLibros/SearchIntercambioServlet?nick=" + miNombre;
         url_final = bookSearch;
         new SearchHistorialTask().execute(new String[] {});
-
-        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
 
 
     }
@@ -69,16 +64,12 @@ public class Historial extends AppCompatActivity {
     private void fillData(){
 
 
-        List<Row> rows = new ArrayList<Row>(30);
-        Row row = null;
 
 
         for(int i = 0; i<parametros.size(); i=i+4){
-            String aux = parametros.get(i+1);
-            String aux2 = parametros.get(i);
-            //
-            // int a = Integer.parseInt(parametros.get(i));
-            rows.add(new Row(parametros.get(i+1),parametros.get(i+2),parametros.get(i+3), (long) 0.0 , Integer.parseInt(parametros.get(i))) );
+            if(!parametros.get(i+1).equals(user)) {
+                rows.add(new Row(parametros.get(i+1),parametros.get(i+2),parametros.get(i+3), (long) 0.0 , Integer.parseInt(parametros.get(i))) );
+            }
         }
 
 
@@ -87,10 +78,38 @@ public class Historial extends AppCompatActivity {
             empty.setWidth(0);
         }
 
-        CustomArrayAdapter c = new CustomArrayAdapter(this, rows);
+        CustomArrayAdapter c = new CustomArrayAdapter(this, rows) {
+            @Override
+            public void onClick(View v) {
+
+                String userB = (String) v.getTag(R.id.key_1);
+
+                Intent i = new Intent(Historial.this, PerfilUsuarios.class);
+                // Enviar el nombre del usuario
+                i.putExtra("userB", userB);
+                i.putExtra("user", user);
+                i.putExtra("pass", pass);
+                startActivity(i);
+            }
+        };
         c.setIds(R.layout.history_rows, R.id.autorH, R.id.tituloH, R.id.usuarioH, R.id.distH, R.id.botonListH);
 
         mList.setAdapter(c);
+
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String idBook = String.valueOf(rows.get(position).getId());
+
+                Intent i = new Intent(Historial.this, PerfilLibros.class);
+                // Enviar el nombre del usuario
+                i.putExtra("idBook", idBook);
+                i.putExtra("user", user);
+                i.putExtra("pass", pass);
+                startActivity(i);
+            }
+        });
     }
 
 
@@ -112,11 +131,9 @@ public class Historial extends AppCompatActivity {
 
                 // Read the contents of an entity and return it as a String.
                 String result = EntityUtils.toString(entity);
-                Log.d(" Devuelto-> ", result);
 
                 parametros = XML_Parser.parseaResultadoHistorial(result);
 
-                fillData();
 
 
             } catch (MalformedURLException mue) {
@@ -130,13 +147,12 @@ public class Historial extends AppCompatActivity {
             return "BIEN";
 
         }
-        /*
+
         protected void onPostExecute(String page) {
-            //textView.setText(page);
-            Toast toast = Toast.makeText(getApplicationContext(), page, Toast.LENGTH_SHORT);
-            toast.show();
+
+            fillData();
         }
-        */
+
     }
 
 

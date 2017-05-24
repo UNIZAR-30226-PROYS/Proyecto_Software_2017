@@ -40,6 +40,7 @@ public class Perfil extends AppCompatActivity {
     private EditText mNewPass;
     private EditText mReNewPass;
     private String user;
+    private String pass;
     private RatingBar valmed;
     private TextView valnum;
 
@@ -49,8 +50,8 @@ public class Perfil extends AppCompatActivity {
         setTitle("Mi Perfil");
 
         setContentView(R.layout.activity_perfil);
-        //user = getIntent().getExtras().getString("Usuario");
-        user = "Laura";
+        user = getIntent().getExtras().getString("user");
+        pass = getIntent().getExtras().getString("pass");
         mUsuario = (EditText) findViewById(R.id.user_email);
         mNombre = (EditText) findViewById(R.id.user_name);
         mApellidos = (EditText) findViewById(R.id.user_apellidos);
@@ -82,7 +83,8 @@ public class Perfil extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(Perfil.this, Menu.class);
-                i.putExtra("Usuario", user);
+                i.putExtra("user", user);
+                i.putExtra("pass", pass);
                 startActivity(i);
             }
         });
@@ -116,12 +118,14 @@ public class Perfil extends AppCompatActivity {
 
             // Contraseña del usuario incorrecta
             if (TextUtils.isEmpty(oldPass)) {
-                /***********************************************************
-                 * Si el campo de la contraseña esta vacío o no coincide con la contreseña del usuario
-                 */
-                /** Comparar con la contraseña pasada por bundle ***/
                 mOldPass.setError(getString(R.string.error_incorrect_password));
                 focusView = mOldPass;
+                cancel = true;
+            }
+            // Contraseña del usuario incorrecta
+            else if (!oldPass.equals(pass)) {
+                mNewPass.setError(getString(R.string.error_invalid_password));
+                focusView = mNewPass;
                 cancel = true;
             }
             // Nueva contraseña incorrecta
@@ -163,7 +167,7 @@ public class Perfil extends AppCompatActivity {
             // form field with an error.
             focusView.requestFocus();
         } else {
-            new UpdateUserTask().execute(new String[]{user, nombre, apellidos, oldPass, newPass});
+            new UpdateUserTask().execute(new String[]{user, nombre, apellidos, pass, newPass});
         }
     }
 
@@ -199,7 +203,7 @@ public class Perfil extends AppCompatActivity {
         protected String doInBackground(String... data) {
             try {
                 String user = data[0];
-                String url = "http://10.0.2.2:8080/CambiaLibros/GetUserServlet?nick=" + user
+                String url = getString(R.string.dir) + "GetUserServlet?nick=" + user
                         + "&nick_s=" + user;
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpGet request = new HttpGet();
@@ -232,7 +236,7 @@ public class Perfil extends AppCompatActivity {
     private class UpdateUserTask extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... data) {
             try {
-                String url = "http://10.0.2.2:8080/CambiaLibros/ModifyUserServlet";
+                String url = getString(R.string.dir) + "ModifyUserServlet";
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost request = new HttpPost(url);
                 List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
@@ -240,8 +244,7 @@ public class Perfil extends AppCompatActivity {
                 postParameters.add(new BasicNameValuePair("nick", data[0]));
                 postParameters.add(new BasicNameValuePair("nombre", data[1]));
                 postParameters.add(new BasicNameValuePair("apellidos", data[2]));
-                /********************Hay que pasar la contraseña por bundle**********************/
-                postParameters.add(new BasicNameValuePair("password", "12345"));
+                postParameters.add(new BasicNameValuePair("password", data[3]));
 
                 if(!TextUtils.isEmpty(data[3])){
                     postParameters.add(new BasicNameValuePair("new_password", data[4]));
@@ -260,7 +263,8 @@ public class Perfil extends AppCompatActivity {
 
         protected void onPostExecute(String page) {
             Intent i = new Intent(Perfil.this, Menu.class);
-            i.putExtra("Usuario", user);
+            i.putExtra("user", user);
+            i.putExtra("pass", pass);
             startActivity(i);
         }
     }
@@ -270,15 +274,14 @@ public class Perfil extends AppCompatActivity {
         protected String doInBackground(String... data) {
             try {
                 String user = data[0];
-                String url = "http://10.0.2.2:8080/CambiaLibros/DeleteUserServlet";
+                String url = getString(R.string.dir) + "DeleteUserServlet";
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost request = new HttpPost(url);
                 List<NameValuePair> postParameters = new ArrayList<NameValuePair>();
 
                 postParameters.add(new BasicNameValuePair("nick", user));
 
-                /********************Hay que pasar la contraseña por bundle**********************/
-                postParameters.add(new BasicNameValuePair("password", "12345"));
+                postParameters.add(new BasicNameValuePair("password", pass));
 
                 UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(
                         postParameters);
@@ -295,5 +298,4 @@ public class Perfil extends AppCompatActivity {
             startActivity(i);
         }
     }
-
 }

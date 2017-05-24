@@ -67,7 +67,7 @@ public class CustomArrayAdapter extends ArrayAdapter<Row> implements
         holder.getTextViewTitulo().setText(row.getTitulo());
         holder.getTextViewAutor().setText(row.getAutor());
         holder.getTextViewUsuario().setText(row.getUsuario());
-        holder.getTextViewDist().setText(Long.toString(row.getDist()) + " km");
+        holder.getTextViewDist().setText((row.getCity()));
        // holder.getButton().setTag(position);
 
         //Para borrar un usuario favorito se necesita el nick del usuario
@@ -77,6 +77,7 @@ public class CustomArrayAdapter extends ArrayAdapter<Row> implements
         //Para devolver o intercambiar se necesita el nick del usuario y el titulo del libro
         // para abrir el chat y generar un mensaje automatico
         holder.getButton().setTag(R.id.key_3, row.getUsuario());
+        holder.getButton().setTag(R.id.key_4, row.getAutor());
         //holder.getCheckBox().setChecked(row.isChecked());
         holder.getButton().setOnClickListener(this);
 

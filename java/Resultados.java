@@ -6,6 +6,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -22,6 +23,10 @@ import java.util.Locale;
 public class Resultados extends AppCompatActivity {
 
     private ListView mList;
+    private String user;
+    private String pass;
+    List<Row> rows = new ArrayList<Row>();
+
 
     /**
      * Called when the activity is first created.
@@ -34,26 +39,11 @@ public class Resultados extends AppCompatActivity {
 
         Button closeButton = (Button) findViewById(R.id.botonCerrar);
 
+        user = getIntent().getExtras().getString("user");
+        pass = getIntent().getExtras().getString("pass");
+
         closeButton.setVisibility(View.INVISIBLE);
         mList = (ListView)findViewById(R.id.list);
-
-        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                // ListView Clicked item index
-                long itemPosition     = id;
-
-                // ListView Clicked item value
-                //int  itemValue    = mList.getitem
-
-                // Show Alert
-                Toast.makeText(getApplicationContext(), "Hiciste click en el número " + itemPosition,
-                        Toast.LENGTH_LONG).show();
-                //closeButton.setText(Long.toString(itemPosition));
-            }
-        });
 
         fillData();
     }
@@ -64,7 +54,6 @@ public class Resultados extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
 
         if(b != null) {
-            List<Row> rows = new ArrayList<Row>(30);
             Row row = null;
 
             ArrayList<String> parametros = b.getStringArrayList("parametros");
@@ -74,14 +63,14 @@ public class Resultados extends AppCompatActivity {
                 Geocoder gcd = new Geocoder(this, Locale.getDefault());
                 String coordS = parametros.get(i+4);
                 String latS = coordS.substring(0,coordS.indexOf(";"));
-                String lonS = coordS.substring(coordS.indexOf(";"),coordS.length());
+                String lonS = coordS.substring(coordS.indexOf(";")+1,coordS.length());
                 List<Address> addresses = null;
                 try {
                     addresses = gcd.getFromLocation(Double.parseDouble(latS), Double.parseDouble(lonS), 1);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if (addresses.size() > 0)
+                if (!addresses.isEmpty())
                 {
                     ciudad = addresses.get(0).getLocality();
                 }
@@ -89,12 +78,10 @@ public class Resultados extends AppCompatActivity {
                 {
                     // do your staff
                 }
-                rows.add(new Row(parametros.get(i+1),parametros.get(i+2),parametros.get(i+3), ciudad));
+
+                rows.add(new Row(parametros.get(i+1),parametros.get(i+2),parametros.get(i+3), ciudad, Integer.parseInt(parametros.get(i))));
             }
 
-            /*  rows.add(new Row("El Corredor Del Laberinto 1", "Dashner James", "Teresa", (long) 4));
-                rows.add(new Row("El Corredor Del Laberinto 2", "Dashner James", "Teresa", (long) 4));
-                rows.add(new Row("El Corredor Del Laberinto 3", "Dashner James", "Teresa", (long) 4)); */
 
             if (!rows.isEmpty()) {
                 TextView empty = (TextView) findViewById(R.id.empty);
@@ -105,18 +92,35 @@ public class Resultados extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    String user = (String) v.getTag(R.id.key_3);
-                    Toast.makeText(this.getContext(), user + " eliminado de favoritos", Toast.LENGTH_SHORT).show();
+                    String userB = (String) v.getTag(R.id.key_3);
+                    Log.d("usuadras-----", userB);
 
                     Intent i = new Intent(Resultados.this, PerfilUsuarios.class);
                     // Enviar el nombre del usuario
-                    i.putExtra("PerfilUser", user);
+                    i.putExtra("userB", userB);
+                    i.putExtra("user", user);
+                    i.putExtra("pass", pass);
                     startActivity(i);
                 }
             };
             c.setIds(R.layout.resultados_rows, R.id.autorR, R.id.tituloR, R.id.usuarioR, R.id.distR, R.id.botonListR);
 
             mList.setAdapter(c);
+
+            mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String idBook = String.valueOf(rows.get(position).getId());
+
+                    Intent i = new Intent(Resultados.this, PerfilLibros.class);
+                    // Enviar el nombre del usuario
+                    i.putExtra("idBook", idBook);
+                    i.putExtra("user", user);
+                    i.putExtra("pass", pass);
+                    startActivity(i);
+                }
+            });
         }
 
     }
